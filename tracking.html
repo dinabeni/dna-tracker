@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNA Transport — Suivi de votre taxi</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: Arial, sans-serif;
+      background: #1a0033;
+      color: white;
+      min-height: 100vh;
+    }
+    
+    .header {
+      background: #6600cc;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo { font-size: 20px; font-weight: bold; }
+    .logo-sub { font-size: 11px; color: #cc99ff; }
+    
+    .badge-live {
+      background: #cc0000;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      animation: blink 1s infinite;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .card-chauffeur {
+      background: #2d0066;
+      margin: 15px;
+      border-radius: 15px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .avatar {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: #6600cc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+    
+    .chauffeur-nom {
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 3px;
+    }
+    
+    .chauffeur-vehicule {
+      font-size: 13px;
+      color: #9966cc;
+      margin-bottom: 5px;
+    }
+    
+    .stars { color: #FFD700; font-size: 13px; }
+    
+    .eta-container {
+      display: flex;
+      gap: 10px;
+      margin: 0 15px 15px;
+    }
+    
+    .eta-box {
+      background: #2d0066;
+      border-radius: 15px;
+      padding: 15px;
+      text-align: center;
+      flex: 1;
+    }
+    
+    .eta-value {
+      font-size: 28px;
+      font-weight: bold;
+      color: #00ff99;
+    }
+    
+    .eta-label {
+      font-size: 11px;
+      color: #9966cc;
+      margin-top: 3px;
+    }
+    
+    #map {
+      width: calc(100% - 30px);
+      height: 300px;
+      border-radius: 15px;
+      margin: 0 15px 15px;
+      background: #2d0066;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6633aa;
+    }
+    
+    .btn-appeler {
+      background: #00cc66;
+      color: white;
+      border: none;
+      padding: 16px;
+      width: calc(100% - 30px);
+      margin: 0 15px 10px;
+      border-radius: 15px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      display: block;
+    }
+    
+    .btn-probleme {
+      background: transparent;
+      color: #ff6666;
+      border: 2px solid #ff6666;
+      padding: 12px;
+      width: calc(100% - 30px);
+      margin: 0 15px 20px;
+      border-radius: 15px;
+      font-size: 14px;
+      cursor: pointer;
+      display: block;
+    }
+    
+    .timeline {
+      background: #2d0066;
+      margin: 0 15px 20px;
+      border-radius: 15px;
+      padding: 15px;
+    }
+    
+    .timeline-title {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #cc99ff;
+    }
+    
+    .timeline-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 15px;
+      align-items: flex-start;
+    }
+    
+    .timeline-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+    
+    .dot-done { background: #00cc66; }
+    .dot-current { background: #6600cc; animation: pulse 1s infinite; }
+    .dot-pending { background: #3d0080; }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
+    
+    .timeline-text { font-size: 13px; }
+    .timeline-sub { font-size: 11px; color: #6633aa; margin-top: 2px; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="logo">🧬 DNA Transport</div>
+      <div class="logo-sub">Suivi en temps réel</div>
+    </div>
+    <div class="badge-live">🔴 LIVE</div>
+  </div>
+
+  <!-- INFOS CHAUFFEUR -->
+  <div class="card-chauffeur">
+    <div class="avatar">👤</div>
+    <div>
+      <div class="chauffeur-nom" id="nomChauffeur">Chargement...</div>
+      <div class="chauffeur-vehicule" id="vehiculeChauffeur">DNA Transport</div>
+      <div class="stars">⭐⭐⭐⭐⭐ <span style="color:#cc99ff;font-size:12px" id="noteChauffeur">4.8/5</span></div>
+    </div>
+  </div>
+
+  <!-- ETA -->
+  <div class="eta-container">
+    <div class="eta-box">
+      <div class="eta-value" id="etaMinutes">--</div>
+      <div class="eta-label">Minutes restantes</div>
+    </div>
+    <div class="eta-box">
+      <div class="eta-value" id="etaDistance">--</div>
+      <div class="eta-label">Kilomètres</div>
+    </div>
+  </div>
+
+  <!-- CARTE -->
+  <div id="map">
+    🗺️ Carte en chargement...
+  </div>
+
+  <!-- BOUTONS -->
+  <button class="btn-appeler" id="btnAppeler" onclick="appellerChauffeur()">
+    📞 Appeler votre chauffeur
+  </button>
+
+  <button class="btn-probleme">
+    ⚠️ Signaler un problème
+  </button>
+
+  <!-- TIMELINE -->
+  <div class="timeline">
+    <div class="timeline-title">📋 Statut de votre course</div>
+    
+    <div class="timeline-item">
+      <div class="timeline-dot dot-done"></div>
+      <div>
+        <div class="timeline-text">✅ Course confirmée</div>
+        <div class="timeline-sub">Paiement reçu par DNA</div>
+      </div>
+    </div>
+    
+    <div class="timeline-item">
+      <div class="timeline-dot dot-done"></div>
+      <div>
+        <div class="timeline-text">✅ Chauffeur assigné</div>
+        <div class="timeline-sub" id="chauffeurAssigne">En route vers vous</div>
+      </div>
+    </div>
+    
+    <div class="timeline-item">
+      <div class="timeline-dot dot-current"></div>
+      <div>
+        <div class="timeline-text">🚕 Chauffeur en route</div>
+        <div class="timeline-sub">Position mise à jour en temps réel</div>
+      </div>
+    </div>
+    
+    <div class="timeline-item">
+      <div class="timeline-dot dot-pending"></div>
+      <div>
+        <div class="timeline-text" style="color:#6633aa">Arrivée du chauffeur</div>
+        <div class="timeline-sub">Estimée dans <span id="etaPending">--</span> minutes</div>
+      </div>
+    </div>
+    
+    <div class="timeline-item">
+      <div class="timeline-dot dot-pending"></div>
+      <div>
+        <div class="timeline-text" style="color:#6633aa">Course terminée</div>
+        <div class="timeline-sub">Vous pourrez noter votre chauffeur</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════
+    // CONFIGURATION (À MODIFIER)
+    // ═══════════════════════════════════════════
+    
+    const N8N_POSITION_URL = 'https://TON_N8N_URL/webhook/get-position';
+    const GOOGLE_MAPS_KEY = 'TA_CLE_GOOGLE_MAPS';
+    
+    // Récupérer les paramètres de l'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const COURSE_ID = urlParams.get('course') || 'CR-001';
+    const CHAUFFEUR_TEL = urlParams.get('tel') || '';
+    
+    // ═══════════════════════════════════════════
+    // RÉCUPÉRER LA POSITION DU CHAUFFEUR
+    // ═══════════════════════════════════════════
+    
+    let map;
+    let markerChauffeur;
+    let positionClient = { lat: -4.7692, lng: 11.8635 };
+    
+    async function recupererPosition() {
+      try {
+        const response = await fetch(
+          N8N_POSITION_URL + '?course=' + COURSE_ID
+        );
+        const data = await response.json();
+        
+        if (data.latitude && data.longitude) {
+          const posChauffeur = {
+            lat: parseFloat(data.latitude),
+            lng: parseFloat(data.longitude)
+          };
+          
+          // Mettre à jour les infos chauffeur
+          if (data.nom) {
+            document.getElementById('nomChauffeur').textContent = data.nom;
+            document.getElementById('chauffeurAssigne').textContent = data.nom + ' est en route';
+          }
+          
+          if (data.vehicule) {
+            document.getElementById('vehiculeChauffeur').textContent = data.vehicule;
+          }
+          
+          if (data.note) {
+            document.getElementById('noteChauffeur').textContent = data.note + '/5';
+          }
+          
+          if (data.eta) {
+            document.getElementById('etaMinutes').textContent = data.eta;
+            document.getElementById('etaPending').textContent = data.eta;
+          }
+          
+          if (data.distance_km) {
+            document.getElementById('etaDistance').textContent = data.distance_km;
+          }
+          
+          // Mettre à jour la carte
+          if (markerChauffeur) {
+            markerChauffeur.setPosition(posChauffeur);
+            map.panTo(posChauffeur);
+          }
+        }
+      } catch(e) {
+        console.log('Mise à jour en attente...');
+      }
+    }
+    
+    function appellerChauffeur() {
+      if (CHAUFFEUR_TEL) {
+        window.location.href = 'tel:' + CHAUFFEUR_TEL;
+      } else {
+        alert('Numéro du chauffeur non disponible. Appelez le standard DNA au 06 XXX XX XX');
+      }
+    }
+    
+    // Initialiser Google Maps
+    function initMap() {
+      map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 15,
+        center: positionClient,
+        styles: [
+          { elementType: "geometry", stylers: [{ color: "#1a0033" }] },
+          { elementType: "labels.text.fill", stylers: [{ color: "#cc99ff" }] },
+          { elementType: "labels.text.stroke", stylers: [{ color: "#1a0033" }] },
+          { featureType: "road", elementType: "geometry", stylers: [{ color: "#2d0066" }] },
+          { featureType: "road.arterial", elementType: "geometry", stylers: [{ color: "#3d0080" }] },
+          { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#6600cc" }] },
+          { featureType: "water", elementType: "geometry", stylers: [{ color: "#000033" }] },
+          { featureType: "poi", stylers: [{ visibility: "off" }] }
+        ]
+      });
+      
+      // Marqueur client
+      new google.maps.Marker({
+        position: positionClient,
+        map: map,
+        title: "Votre position",
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 10,
+          fillColor: "#00cc66",
+          fillOpacity: 1,
+          strokeColor: "#ffffff",
+          strokeWeight: 3
+        }
+      });
+      
+      // Marqueur chauffeur (initial)
+      markerChauffeur = new google.maps.Marker({
+        position: { lat: -4.7850, lng: 11.8450 },
+        map: map,
+        title: "Votre chauffeur DNA",
+        label: {
+          text: "🚕",
+          fontSize: "24px"
+        }
+      });
+      
+      // Première récupération de position
+      recupererPosition();
+      
+      // Mise à jour toutes les 10 secondes
+      setInterval(recupererPosition, 10000);
+    }
+  </script>
+  
+  <!-- Google Maps API -->
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=TA_CLE_GOOGLE_MAPS&callback=initMap">
+  </script>
+
+</body>
+</html>
