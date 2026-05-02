@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNA — Rapports</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--violet:#6B21A8;--violet-light:#9333EA;--violet-pale:#F3E8FF;--bg:#F8F9FC;--card:#FFFFFF;--text:#1E1B4B;--text-light:#6B7280;--green:#10B981;--red:#EF4444;--gold:#F59E0B;--shadow:0 2px 12px rgba(0,0,0,0.06)}
+    body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text)}
+    .sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:linear-gradient(180deg,var(--violet) 0%,#4A0080 100%);padding:20px;z-index:100;display:flex;flex-direction:column;overflow-y:auto}
+    .sidebar-logo{display:flex;align-items:center;gap:10px;margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.15)}
+    .sidebar-logo img{width:38px;height:38px;border-radius:10px;object-fit:cover}
+    .sidebar-logo-text{font-size:14px;font-weight:700;color:white}
+    .sidebar-logo-sub{font-size:10px;color:rgba(255,255,255,0.6)}
+    .menu-section{font-size:10px;font-weight:600;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin:18px 0 8px}
+    .menu-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;margin-bottom:3px;transition:all 0.2s}
+    .menu-item:hover{background:rgba(255,255,255,0.1);color:white}
+    .menu-item.active{background:rgba(255,255,255,0.2);color:white;font-weight:600}
+    .menu-icon{font-size:16px;width:22px}
+    .menu-badge{margin-left:auto;background:var(--red);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+    .sidebar-bottom{margin-top:auto;padding-top:20px;border-top:1px solid rgba(255,255,255,0.15)}
+    .sidebar-user{display:flex;align-items:center;gap:10px}
+    .user-avatar{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .user-name{font-size:12px;font-weight:600;color:white}
+    .user-role{font-size:10px;color:rgba(255,255,255,0.5)}
+    .main{margin-left:240px}
+    .topbar{background:white;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #F0F0F0;position:sticky;top:0;z-index:50}
+    .topbar-title{font-size:18px;font-weight:700}
+    .topbar-sub{font-size:12px;color:var(--text-light)}
+    .content{padding:24px}
+    .rapport-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+    .rapport-card{background:var(--card);border-radius:16px;padding:24px;box-shadow:var(--shadow);border:1px solid #F0F0F0;display:flex;gap:18px;align-items:flex-start;cursor:pointer;transition:transform 0.2s}
+    .rapport-card:hover{transform:translateY(-4px)}
+    .rapport-icon{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+    .ic-violet{background:var(--violet-pale)}
+    .ic-green{background:#D1FAE5}
+    .ic-gold{background:#FEF3C7}
+    .ic-blue{background:#DBEAFE}
+    .ic-red{background:#FEE2E2}
+    .ic-gray{background:#F3F4F6}
+    .rapport-title{font-size:15px;font-weight:700;margin-bottom:5px}
+    .rapport-desc{font-size:12px;color:var(--text-light);line-height:1.5;margin-bottom:10px}
+    .rapport-freq{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--violet);font-weight:600}
+    .rapport-btn{display:inline-flex;align-items:center;gap:6px;background:var(--violet-pale);color:var(--violet);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;margin-top:10px;border:none;cursor:pointer;font-family:'Poppins',sans-serif}
+    @media(max-width:768px){.sidebar{display:none}.main{margin-left:0}.rapport-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-logo"><img src="https://raw.githubusercontent.com/dinabeni/dna-tracker/ed12391a53eda66f2d33609bbb8fccedf213cf4e/WhatsApp%20Image%202026-04-11%20at%2001.06.45.jpeg" alt="DNA"><div><div class="sidebar-logo-text">DNA Transport</div><div class="sidebar-logo-sub">Dashboard</div></div></div>
+    <div>
+      <div class="menu-section">Principal</div>
+      <a class="menu-item" href="dashboard.html"><span class="menu-icon">📊</span> Vue d'ensemble</a>
+      <a class="menu-item" href="dash-carte.html"><span class="menu-icon">🗺️</span> Carte en direct</a>
+      <a class="menu-item" href="dash-courses.html"><span class="menu-icon">🚕</span> Courses</a>
+      <div class="menu-section">Gestion</div>
+      <a class="menu-item" href="dash-chauffeurs.html"><span class="menu-icon">👤</span> Chauffeurs</a>
+      <a class="menu-item" href="dash-finances.html"><span class="menu-icon">💰</span> Finances</a>
+      <a class="menu-item" href="dash-wifi.html"><span class="menu-icon">📶</span> WiFi & Revenus</a>
+      <a class="menu-item" href="dash-b2b.html"><span class="menu-icon">🏢</span> Entreprises B2B</a>
+      <a class="menu-item" href="dash-rentabilite.html"><span class="menu-icon">📈</span> Rentabilité</a>
+      <div class="menu-section">Clients</div>
+      <a class="menu-item" href="dash-vip.html"><span class="menu-icon">👑</span> Clients VIP</a>
+      <a class="menu-item" href="dash-annulations.html"><span class="menu-icon">📉</span> Annulations</a>
+      <div class="menu-section">Outils</div>
+      <a class="menu-item" href="dash-alertes.html"><span class="menu-icon">🔔</span> Alertes</a>
+      <a class="menu-item active" href="dash-rapports.html"><span class="menu-icon">📋</span> Rapports</a>
+      <a class="menu-item" href="dash-parametres.html"><span class="menu-icon">⚙️</span> Paramètres</a>
+    </div>
+    <div class="sidebar-bottom"><div class="sidebar-user"><div class="user-avatar">👑</div><div><div class="user-name">Direction DNA</div><div class="user-role">Administrateur</div></div></div></div>
+  </div>
+  <div class="main">
+    <div class="topbar"><div><div class="topbar-title">📋 Rapports</div><div class="topbar-sub">Exports et synthèses DNA Transport</div></div></div>
+    <div class="content">
+      <div class="rapport-grid">
+        <div class="rapport-card">
+          <div class="rapport-icon ic-violet">📊</div>
+          <div>
+            <div class="rapport-title">Rapport journalier</div>
+            <div class="rapport-desc">Résumé complet de la journée : courses, revenus, chauffeurs actifs, connexions WiFi, alertes.</div>
+            <div class="rapport-freq">🕙 Généré automatiquement à 21h00</div>
+            <button class="rapport-btn">📥 Télécharger</button>
+          </div>
+        </div>
+        <div class="rapport-card">
+          <div class="rapport-icon ic-green">📈</div>
+          <div>
+            <div class="rapport-title">Rapport hebdomadaire</div>
+            <div class="rapport-desc">Bilan de la semaine avec comparaison à la semaine précédente et tendances.</div>
+            <div class="rapport-freq">🕙 Généré chaque dimanche soir</div>
+            <button class="rapport-btn">📥 Télécharger</button>
+          </div>
+        </div>
+        <div class="rapport-card">
+          <div class="rapport-icon ic-gold">📑</div>
+          <div>
+            <div class="rapport-title">Rapport mensuel</div>
+            <div class="rapport-desc">Synthèse financière complète du mois incluant toutes les sources de revenus DNA.</div>
+            <div class="rapport-freq">🕙 Le dernier jour du mois</div>
+            <button class="rapport-btn">📥 Télécharger</button>
+          </div>
+        </div>
+        <div class="rapport-card">
+          <div class="rapport-icon ic-blue">💰</div>
+          <div>
+            <div class="rapport-title">Export financier Excel</div>
+            <div class="rapport-desc">Toutes les transactions (abonnements, commissions, WiFi) exportées au format Excel.</div>
+            <div class="rapport-freq">🕙 À la demande</div>
+            <button class="rapport-btn">📥 Exporter Excel</button>
+          </div>
+        </div>
+        <div class="rapport-card">
+          <div class="rapport-icon ic-red">🚕</div>
+          <div>
+            <div class="rapport-title">Rapport chauffeurs</div>
+            <div class="rapport-desc">Performance individuelle de chaque chauffeur : courses, gains, notes, absences.</div>
+            <div class="rapport-freq">🕙 À la demande</div>
+            <button class="rapport-btn">📥 Télécharger</button>
+          </div>
+        </div>
+        <div class="rapport-card">
+          <div class="rapport-icon ic-gray">🏢</div>
+          <div>
+            <div class="rapport-title">Rapport B2B</div>
+            <div class="rapport-desc">Suivi des prospects, contrats signés et revenus générés par les entreprises partenaires.</div>
+            <div class="rapport-freq">🕙 À la demande</div>
+            <button class="rapport-btn">📥 Télécharger</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
