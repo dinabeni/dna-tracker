@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNA — Clients VIP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--violet:#6B21A8;--violet-light:#9333EA;--violet-pale:#F3E8FF;--bg:#F8F9FC;--card:#FFFFFF;--text:#1E1B4B;--text-light:#6B7280;--green:#10B981;--red:#EF4444;--gold:#F59E0B;--shadow:0 2px 12px rgba(0,0,0,0.06)}
+    body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text)}
+    .sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:linear-gradient(180deg,var(--violet) 0%,#4A0080 100%);padding:20px;z-index:100;display:flex;flex-direction:column;overflow-y:auto}
+    .sidebar-logo{display:flex;align-items:center;gap:10px;margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.15)}
+    .sidebar-logo img{width:38px;height:38px;border-radius:10px;object-fit:cover}
+    .sidebar-logo-text{font-size:14px;font-weight:700;color:white}
+    .sidebar-logo-sub{font-size:10px;color:rgba(255,255,255,0.6)}
+    .menu-section{font-size:10px;font-weight:600;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin:18px 0 8px}
+    .menu-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;margin-bottom:3px;transition:all 0.2s}
+    .menu-item:hover{background:rgba(255,255,255,0.1);color:white}
+    .menu-item.active{background:rgba(255,255,255,0.2);color:white;font-weight:600}
+    .menu-icon{font-size:16px;width:22px}
+    .menu-badge{margin-left:auto;background:var(--red);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+    .sidebar-bottom{margin-top:auto;padding-top:20px;border-top:1px solid rgba(255,255,255,0.15)}
+    .sidebar-user{display:flex;align-items:center;gap:10px}
+    .user-avatar{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .user-name{font-size:12px;font-weight:600;color:white}
+    .user-role{font-size:10px;color:rgba(255,255,255,0.5)}
+    .main{margin-left:240px}
+    .topbar{background:white;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #F0F0F0;position:sticky;top:0;z-index:50}
+    .topbar-title{font-size:18px;font-weight:700}
+    .topbar-sub{font-size:12px;color:var(--text-light)}
+    .content{padding:24px}
+    .cercle-hero{background:linear-gradient(135deg,var(--gold),#D97706);border-radius:20px;padding:28px;color:white;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center}
+    .cercle-title{font-size:22px;font-weight:800;margin-bottom:6px}
+    .cercle-sub{font-size:14px;opacity:0.85}
+    .cercle-icon{font-size:60px;opacity:0.4}
+    .vip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .vip-card{background:var(--card);border-radius:16px;padding:20px;box-shadow:var(--shadow);border:1px solid #F0F0F0;text-align:center;transition:transform 0.2s}
+    .vip-card:hover{transform:translateY(-4px)}
+    .vip-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#D97706);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px;box-shadow:0 6px 20px rgba(245,158,11,0.3)}
+    .vip-nom{font-size:15px;font-weight:700;margin-bottom:4px}
+    .vip-tel{font-size:12px;color:var(--text-light);margin-bottom:10px}
+    .vip-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:14px}
+    .b-gold{background:#FEF3C7;color:#92400E}
+    .b-silver{background:#F3F4F6;color:#374151}
+    .b-bronze{background:#FEE2E2;color:#7C3AED}
+    .vip-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding-top:14px;border-top:1px solid #F0F0F0}
+    .vip-stat-val{font-size:14px;font-weight:700;color:var(--violet)}
+    .vip-stat-lbl{font-size:10px;color:var(--text-light);margin-top:2px}
+    .progress-bar{height:6px;border-radius:10px;background:#F0F0F0;margin:12px 0 6px;overflow:hidden}
+    .progress-fill{height:100%;border-radius:10px;background:linear-gradient(135deg,var(--gold),#D97706)}
+    .progress-lbl{font-size:10px;color:var(--text-light)}
+    @media(max-width:768px){.sidebar{display:none}.main{margin-left:0}.vip-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-logo"><img src="https://raw.githubusercontent.com/dinabeni/dna-tracker/ed12391a53eda66f2d33609bbb8fccedf213cf4e/WhatsApp%20Image%202026-04-11%20at%2001.06.45.jpeg" alt="DNA"><div><div class="sidebar-logo-text">DNA Transport</div><div class="sidebar-logo-sub">Dashboard</div></div></div>
+    <div>
+      <div class="menu-section">Principal</div>
+      <a class="menu-item" href="dashboard.html"><span class="menu-icon">📊</span> Vue d'ensemble</a>
+      <a class="menu-item" href="dash-carte.html"><span class="menu-icon">🗺️</span> Carte en direct</a>
+      <a class="menu-item" href="dash-courses.html"><span class="menu-icon">🚕</span> Courses</a>
+      <div class="menu-section">Gestion</div>
+      <a class="menu-item" href="dash-chauffeurs.html"><span class="menu-icon">👤</span> Chauffeurs</a>
+      <a class="menu-item" href="dash-finances.html"><span class="menu-icon">💰</span> Finances</a>
+      <a class="menu-item" href="dash-wifi.html"><span class="menu-icon">📶</span> WiFi & Revenus</a>
+      <a class="menu-item" href="dash-b2b.html"><span class="menu-icon">🏢</span> Entreprises B2B</a>
+      <a class="menu-item" href="dash-rentabilite.html"><span class="menu-icon">📈</span> Rentabilité</a>
+      <div class="menu-section">Clients</div>
+      <a class="menu-item active" href="dash-vip.html"><span class="menu-icon">👑</span> Clients VIP</a>
+      <a class="menu-item" href="dash-annulations.html"><span class="menu-icon">📉</span> Annulations</a>
+      <div class="menu-section">Outils</div>
+      <a class="menu-item" href="dash-alertes.html"><span class="menu-icon">🔔</span> Alertes</a>
+      <a class="menu-item" href="dash-rapports.html"><span class="menu-icon">📋</span> Rapports</a>
+      <a class="menu-item" href="dash-parametres.html"><span class="menu-icon">⚙️</span> Paramètres</a>
+    </div>
+    <div class="sidebar-bottom"><div class="sidebar-user"><div class="user-avatar">👑</div><div><div class="user-name">Direction DNA</div><div class="user-role">Administrateur</div></div></div></div>
+  </div>
+  <div class="main">
+    <div class="topbar"><div><div class="topbar-title">👑 Clients VIP — Cercle DNA</div><div class="topbar-sub">Membres du programme de fidélité exclusif</div></div></div>
+    <div class="content">
+      <div class="cercle-hero">
+        <div>
+          <div class="cercle-title">🏆 Le Cercle DNA</div>
+          <div class="cercle-sub">Programme VIP réservé aux clients ayant effectué 30+ courses<br>3 membres actifs — Sorties exclusives organisées</div>
+        </div>
+        <div class="cercle-icon">👑</div>
+      </div>
+      <div class="vip-grid">
+        <div class="vip-card">
+          <div class="vip-avatar">👩🏾</div>
+          <div class="vip-nom">Merveille K.</div>
+          <div class="vip-tel">+242 06 XXX XX XX</div>
+          <span class="vip-badge b-gold">🥇 Gold Member</span>
+          <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+          <div class="progress-lbl">45/30 courses — Objectif dépassé !</div>
+          <div class="vip-stats">
+            <div><div class="vip-stat-val">45</div><div class="vip-stat-lbl">Courses</div></div>
+            <div><div class="vip-stat-val">-15%</div><div class="vip-stat-lbl">Réduction</div></div>
+            <div><div class="vip-stat-val">3 mois</div><div class="vip-stat-lbl">Membre</div></div>
+          </div>
+        </div>
+        <div class="vip-card">
+          <div class="vip-avatar">👨🏾</div>
+          <div class="vip-nom">Patrick L.</div>
+          <div class="vip-tel">+242 06 XXX XX XX</div>
+          <span class="vip-badge b-silver">🥈 Silver Member</span>
+          <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+          <div class="progress-lbl">32/30 courses — Objectif atteint !</div>
+          <div class="vip-stats">
+            <div><div class="vip-stat-val">32</div><div class="vip-stat-lbl">Courses</div></div>
+            <div><div class="vip-stat-val">-10%</div><div class="vip-stat-lbl">Réduction</div></div>
+            <div><div class="vip-stat-val">2 mois</div><div class="vip-stat-lbl">Membre</div></div>
+          </div>
+        </div>
+        <div class="vip-card">
+          <div class="vip-avatar">👩🏾</div>
+          <div class="vip-nom">Sandra M.</div>
+          <div class="vip-tel">+242 06 XXX XX XX</div>
+          <span class="vip-badge b-bronze">🥉 Bronze Member</span>
+          <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+          <div class="progress-lbl">30/30 courses — Nouveau membre !</div>
+          <div class="vip-stats">
+            <div><div class="vip-stat-val">30</div><div class="vip-stat-lbl">Courses</div></div>
+            <div><div class="vip-stat-val">-10%</div><div class="vip-stat-lbl">Réduction</div></div>
+            <div><div class="vip-stat-val">1 mois</div><div class="vip-stat-lbl">Membre</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
