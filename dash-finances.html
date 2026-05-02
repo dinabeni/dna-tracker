@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNA — Finances</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--violet:#6B21A8;--violet-light:#9333EA;--violet-pale:#F3E8FF;--bg:#F8F9FC;--card:#FFFFFF;--text:#1E1B4B;--text-light:#6B7280;--green:#10B981;--red:#EF4444;--gold:#F59E0B;--shadow:0 2px 12px rgba(0,0,0,0.06)}
+    body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text)}
+    .sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:linear-gradient(180deg,var(--violet) 0%,#4A0080 100%);padding:20px;z-index:100;display:flex;flex-direction:column;overflow-y:auto}
+    .sidebar-logo{display:flex;align-items:center;gap:10px;margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.15)}
+    .sidebar-logo img{width:38px;height:38px;border-radius:10px;object-fit:cover}
+    .sidebar-logo-text{font-size:14px;font-weight:700;color:white}
+    .sidebar-logo-sub{font-size:10px;color:rgba(255,255,255,0.6)}
+    .menu-section{font-size:10px;font-weight:600;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin:18px 0 8px}
+    .menu-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;margin-bottom:3px;transition:all 0.2s}
+    .menu-item:hover{background:rgba(255,255,255,0.1);color:white}
+    .menu-item.active{background:rgba(255,255,255,0.2);color:white;font-weight:600}
+    .menu-icon{font-size:16px;width:22px}
+    .menu-badge{margin-left:auto;background:var(--red);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+    .sidebar-bottom{margin-top:auto;padding-top:20px;border-top:1px solid rgba(255,255,255,0.15)}
+    .sidebar-user{display:flex;align-items:center;gap:10px}
+    .user-avatar{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .user-name{font-size:12px;font-weight:600;color:white}
+    .user-role{font-size:10px;color:rgba(255,255,255,0.5)}
+    .main{margin-left:240px}
+    .topbar{background:white;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #F0F0F0;position:sticky;top:0;z-index:50}
+    .topbar-title{font-size:18px;font-weight:700}
+    .topbar-sub{font-size:12px;color:var(--text-light)}
+    .content{padding:24px}
+    .hero-card{background:linear-gradient(135deg,var(--violet),var(--violet-light));border-radius:20px;padding:30px;color:white;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center}
+    .hero-title{font-size:13px;opacity:0.8;margin-bottom:8px}
+    .hero-val{font-size:44px;font-weight:800}
+    .hero-sub{font-size:12px;opacity:0.7;margin-top:5px}
+    .hero-icon{font-size:60px;opacity:0.3}
+    .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+    .rev-box{background:var(--card);border-radius:16px;padding:20px;box-shadow:var(--shadow);border:1px solid #F0F0F0;text-align:center;transition:transform 0.2s}
+    .rev-box:hover{transform:translateY(-3px)}
+    .rev-icon{font-size:28px;margin-bottom:10px}
+    .rev-val{font-size:24px;font-weight:800;color:var(--violet)}
+    .rev-lbl{font-size:12px;color:var(--text-light);margin-top:4px}
+    .rev-trend{font-size:11px;color:var(--green);margin-top:6px;font-weight:600}
+    .section-card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);border:1px solid #F0F0F0;overflow:hidden;margin-bottom:20px}
+    .card-header{padding:16px 20px;border-bottom:1px solid #F8F8F8;display:flex;justify-content:space-between;align-items:center}
+    .card-title{font-size:14px;font-weight:700}
+    .card-sub{font-size:11px;color:var(--text-light)}
+    table{width:100%;border-collapse:collapse}
+    thead th{padding:12px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--text-light);text-transform:uppercase;background:#FAFAFA;border-bottom:1px solid #F0F0F0}
+    tbody td{padding:14px 16px;font-size:13px;border-bottom:1px solid #F8F8F8}
+    tbody tr:hover{background:#FAFAFA}
+    @media(max-width:768px){.sidebar{display:none}.main{margin-left:0}.rev-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-logo"><img src="https://raw.githubusercontent.com/dinabeni/dna-tracker/ed12391a53eda66f2d33609bbb8fccedf213cf4e/WhatsApp%20Image%202026-04-11%20at%2001.06.45.jpeg" alt="DNA"><div><div class="sidebar-logo-text">DNA Transport</div><div class="sidebar-logo-sub">Dashboard</div></div></div>
+    <div>
+      <div class="menu-section">Principal</div>
+      <a class="menu-item" href="dashboard.html"><span class="menu-icon">📊</span> Vue d'ensemble</a>
+      <a class="menu-item" href="dash-carte.html"><span class="menu-icon">🗺️</span> Carte en direct</a>
+      <a class="menu-item" href="dash-courses.html"><span class="menu-icon">🚕</span> Courses</a>
+      <div class="menu-section">Gestion</div>
+      <a class="menu-item" href="dash-chauffeurs.html"><span class="menu-icon">👤</span> Chauffeurs</a>
+      <a class="menu-item active" href="dash-finances.html"><span class="menu-icon">💰</span> Finances</a>
+      <a class="menu-item" href="dash-wifi.html"><span class="menu-icon">📶</span> WiFi & Revenus</a>
+      <a class="menu-item" href="dash-b2b.html"><span class="menu-icon">🏢</span> Entreprises B2B</a>
+      <a class="menu-item" href="dash-rentabilite.html"><span class="menu-icon">📈</span> Rentabilité</a>
+      <div class="menu-section">Clients</div>
+      <a class="menu-item" href="dash-vip.html"><span class="menu-icon">👑</span> Clients VIP</a>
+      <a class="menu-item" href="dash-annulations.html"><span class="menu-icon">📉</span> Annulations</a>
+      <div class="menu-section">Outils</div>
+      <a class="menu-item" href="dash-alertes.html"><span class="menu-icon">🔔</span> Alertes</a>
+      <a class="menu-item" href="dash-rapports.html"><span class="menu-icon">📋</span> Rapports</a>
+      <a class="menu-item" href="dash-parametres.html"><span class="menu-icon">⚙️</span> Paramètres</a>
+    </div>
+    <div class="sidebar-bottom"><div class="sidebar-user"><div class="user-avatar">👑</div><div><div class="user-name">Direction DNA</div><div class="user-role">Administrateur</div></div></div></div>
+  </div>
+  <div class="main">
+    <div class="topbar"><div><div class="topbar-title">💰 Finances & Revenus</div><div class="topbar-sub">Tableau financier complet DNA</div></div></div>
+    <div class="content">
+      <div class="hero-card">
+        <div>
+          <div class="hero-title">💰 Revenus totaux du jour</div>
+          <div class="hero-val">178 600 FCFA</div>
+          <div class="hero-sub">Abonnements + Commissions + WiFi</div>
+        </div>
+        <div class="hero-icon">💰</div>
+      </div>
+      <div class="rev-grid">
+        <div class="rev-box">
+          <div class="rev-icon">📋</div>
+          <div class="rev-val">175 000</div>
+          <div class="rev-lbl">Abonnements FCFA</div>
+          <div class="rev-trend">↑ 7 chauffeurs actifs</div>
+        </div>
+        <div class="rev-box">
+          <div class="rev-icon">🚕</div>
+          <div class="rev-val">1 200</div>
+          <div class="rev-lbl">Commissions FCFA</div>
+          <div class="rev-trend">↑ 4 courses aujourd'hui</div>
+        </div>
+        <div class="rev-box">
+          <div class="rev-icon">📶</div>
+          <div class="rev-val">2 400</div>
+          <div class="rev-lbl">WiFi FCFA</div>
+          <div class="rev-trend">↑ 12 connexions</div>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="card-header"><div><div class="card-title">📊 Détail des transactions</div><div class="card-sub">Toutes les entrées d'argent</div></div></div>
+        <table>
+          <thead><tr><th>Type</th><th>Description</th><th>Montant</th><th>Heure</th></tr></thead>
+          <tbody>
+            <tr><td>📋 Abonnement</td><td>Jean Mbemba — DNA-001</td><td style="color:var(--green);font-weight:600">+25 000 F</td><td style="color:var(--text-light)">08:00</td></tr>
+            <tr><td>📋 Abonnement</td><td>Pierre Lounda — DNA-002</td><td style="color:var(--green);font-weight:600">+25 000 F</td><td style="color:var(--text-light)">08:15</td></tr>
+            <tr><td>📋 Abonnement</td><td>Marie Nkouka — DNA-003</td><td style="color:var(--green);font-weight:600">+25 000 F</td><td style="color:var(--text-light)">08:30</td></tr>
+            <tr><td>🚕 Commission</td><td>Course CR-0001 — 16%</td><td style="color:var(--violet);font-weight:600">+160 F</td><td style="color:var(--text-light)">14:32</td></tr>
+            <tr><td>🚕 Commission</td><td>Course CR-0002 — 16%</td><td style="color:var(--violet);font-weight:600">+400 F</td><td style="color:var(--text-light)">14:28</td></tr>
+            <tr><td>📶 WiFi</td><td>Connexion taxi DNA-001</td><td style="color:var(--gold);font-weight:600">+200 F</td><td style="color:var(--text-light)">14:20</td></tr>
+            <tr><td>📶 WiFi</td><td>Connexion taxi DNA-002</td><td style="color:var(--gold);font-weight:600">+200 F</td><td style="color:var(--text-light)">13:55</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
