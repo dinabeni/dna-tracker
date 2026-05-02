@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNA — Entreprises B2B</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--violet:#6B21A8;--violet-light:#9333EA;--violet-pale:#F3E8FF;--bg:#F8F9FC;--card:#FFFFFF;--text:#1E1B4B;--text-light:#6B7280;--green:#10B981;--red:#EF4444;--gold:#F59E0B;--shadow:0 2px 12px rgba(0,0,0,0.06)}
+    body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text)}
+    .sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:linear-gradient(180deg,var(--violet) 0%,#4A0080 100%);padding:20px;z-index:100;display:flex;flex-direction:column;overflow-y:auto}
+    .sidebar-logo{display:flex;align-items:center;gap:10px;margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.15)}
+    .sidebar-logo img{width:38px;height:38px;border-radius:10px;object-fit:cover}
+    .sidebar-logo-text{font-size:14px;font-weight:700;color:white}
+    .sidebar-logo-sub{font-size:10px;color:rgba(255,255,255,0.6)}
+    .menu-section{font-size:10px;font-weight:600;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin:18px 0 8px}
+    .menu-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;margin-bottom:3px;transition:all 0.2s}
+    .menu-item:hover{background:rgba(255,255,255,0.1);color:white}
+    .menu-item.active{background:rgba(255,255,255,0.2);color:white;font-weight:600}
+    .menu-icon{font-size:16px;width:22px}
+    .menu-badge{margin-left:auto;background:var(--red);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+    .sidebar-bottom{margin-top:auto;padding-top:20px;border-top:1px solid rgba(255,255,255,0.15)}
+    .sidebar-user{display:flex;align-items:center;gap:10px}
+    .user-avatar{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .user-name{font-size:12px;font-weight:600;color:white}
+    .user-role{font-size:10px;color:rgba(255,255,255,0.5)}
+    .main{margin-left:240px}
+    .topbar{background:white;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #F0F0F0;position:sticky;top:0;z-index:50}
+    .topbar-title{font-size:18px;font-weight:700}
+    .topbar-sub{font-size:12px;color:var(--text-light)}
+    .content{padding:24px}
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .stat-box{background:var(--card);border-radius:16px;padding:20px;box-shadow:var(--shadow);border:1px solid #F0F0F0;text-align:center}
+    .stat-icon{font-size:28px;margin-bottom:8px}
+    .stat-val{font-size:28px;font-weight:800;color:var(--violet)}
+    .stat-lbl{font-size:12px;color:var(--text-light);margin-top:4px}
+    .b2b-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .b2b-card{background:var(--card);border-radius:16px;padding:20px;box-shadow:var(--shadow);border:1px solid #F0F0F0;transition:transform 0.2s}
+    .b2b-card:hover{transform:translateY(-3px)}
+    .b2b-header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+    .b2b-icon{width:50px;height:50px;border-radius:14px;background:var(--violet-pale);display:flex;align-items:center;justify-content:center;font-size:26px}
+    .b2b-nom{font-size:15px;font-weight:700}
+    .b2b-secteur{font-size:11px;color:var(--text-light);margin-top:2px}
+    .b2b-badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block;margin-bottom:12px}
+    .b-prosp{background:#FEF3C7;color:#92400E}
+    .b-inter{background:#D1FAE5;color:#065F46}
+    .b-signe{background:#DBEAFE;color:#1E40AF}
+    .b2b-info{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding-top:12px;border-top:1px solid #F0F0F0}
+    .b2b-info-item{text-align:center}
+    .b2b-info-val{font-size:13px;font-weight:700;color:var(--violet)}
+    .b2b-info-lbl{font-size:10px;color:var(--text-light);margin-top:2px}
+    .etoiles{color:var(--gold);font-size:14px}
+    @media(max-width:768px){.sidebar{display:none}.main{margin-left:0}.stats-row{grid-template-columns:repeat(2,1fr)}.b2b-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-logo"><img src="https://raw.githubusercontent.com/dinabeni/dna-tracker/ed12391a53eda66f2d33609bbb8fccedf213cf4e/WhatsApp%20Image%202026-04-11%20at%2001.06.45.jpeg" alt="DNA"><div><div class="sidebar-logo-text">DNA Transport</div><div class="sidebar-logo-sub">Dashboard</div></div></div>
+    <div>
+      <div class="menu-section">Principal</div>
+      <a class="menu-item" href="dashboard.html"><span class="menu-icon">📊</span> Vue d'ensemble</a>
+      <a class="menu-item" href="dash-carte.html"><span class="menu-icon">🗺️</span> Carte en direct</a>
+      <a class="menu-item" href="dash-courses.html"><span class="menu-icon">🚕</span> Courses</a>
+      <div class="menu-section">Gestion</div>
+      <a class="menu-item" href="dash-chauffeurs.html"><span class="menu-icon">👤</span> Chauffeurs</a>
+      <a class="menu-item" href="dash-finances.html"><span class="menu-icon">💰</span> Finances</a>
+      <a class="menu-item" href="dash-wifi.html"><span class="menu-icon">📶</span> WiFi & Revenus</a>
+      <a class="menu-item active" href="dash-b2b.html"><span class="menu-icon">🏢</span> Entreprises B2B</a>
+      <a class="menu-item" href="dash-rentabilite.html"><span class="menu-icon">📈</span> Rentabilité</a>
+      <div class="menu-section">Clients</div>
+      <a class="menu-item" href="dash-vip.html"><span class="menu-icon">👑</span> Clients VIP</a>
+      <a class="menu-item" href="dash-annulations.html"><span class="menu-icon">📉</span> Annulations</a>
+      <div class="menu-section">Outils</div>
+      <a class="menu-item" href="dash-alertes.html"><span class="menu-icon">🔔</span> Alertes</a>
+      <a class="menu-item" href="dash-rapports.html"><span class="menu-icon">📋</span> Rapports</a>
+      <a class="menu-item" href="dash-parametres.html"><span class="menu-icon">⚙️</span> Paramètres</a>
+    </div>
+    <div class="sidebar-bottom"><div class="sidebar-user"><div class="user-avatar">👑</div><div><div class="user-name">Direction DNA</div><div class="user-role">Administrateur</div></div></div></div>
+  </div>
+  <div class="main">
+    <div class="topbar"><div><div class="topbar-title">🏢 Entreprises B2B</div><div class="topbar-sub">Gestion des contrats et prospects corporate</div></div></div>
+    <div class="content">
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-icon">🏢</div><div class="stat-val">5</div><div class="stat-lbl">Entreprises ciblées</div></div>
+        <div class="stat-box"><div class="stat-icon">✅</div><div class="stat-val">1</div><div class="stat-lbl">Intéressées</div></div>
+        <div class="stat-box"><div class="stat-icon">📞</div><div class="stat-val">4</div><div class="stat-lbl">En prospection</div></div>
+        <div class="stat-box"><div class="stat-icon">💰</div><div class="stat-val">0</div><div class="stat-lbl">Signées</div></div>
+      </div>
+      <div class="b2b-grid">
+        <div class="b2b-card">
+          <div class="b2b-header"><div class="b2b-icon">🛢️</div><div><div class="b2b-nom">TotalEnergies EP Congo</div><div class="b2b-secteur">Pétrole & Gaz</div></div></div>
+          <span class="b2b-badge b-prosp">📞 En prospection</span>
+          <div class="etoiles">⭐⭐⭐⭐⭐</div>
+          <div class="b2b-info">
+            <div class="b2b-info-item"><div class="b2b-info-val">Premium</div><div class="b2b-info-lbl">Forfait cible</div></div>
+            <div class="b2b-info-item"><div class="b2b-info-val">1M FCFA</div><div class="b2b-info-lbl">Potentiel/mois</div></div>
+            <div class="b2b-info-item"><div class="b2b-info-val">En attente</div><div class="b2b-info-lbl">Contact</div></div>
+          </div>
+        </div>
+        <div class="b2b-card">
+          <div class="b2b-header"><div class="b2b-icon">🏦</div><div><div class="b2b-nom">BGFI Bank</div><div class="b2b-secteur">Banque & Finance</div></div></div>
+          <span class="b2b-badge b-prosp">📞 En prospection</span>
+          <div class="etoiles">⭐⭐⭐⭐</div>
+          <div class="b2b-info">
+            <div class="b2b-info-item"><div class="b2b-info-val">Business</div><div class="b2b-info-lbl">Forfait cible</div></div>
+            <div class="b2b-info-item"><div class="b2b-info-val">500K FCFA</div><div class="b2b-info-lbl">Potentiel/mois</div></div>
+            <div class="b2b-info-item"><div class="b2b-info-val">En attente</div><div class="b2b-info-lbl">Contact</div></div>
+          </div>
+        </div>
+        <div class="b2b-card">
+          <div class="b2b-header"><div class="b2b-icon">🏨</div><div><div class="b2b-nom">Hôtel Pefaco</div><div class="b2b-secteur">Hôtellerie & Tourisme</div></div></div>
+          <span class="b2b-badge b-inter">✅ Intéressé</span>
+          <div class="etoiles">⭐⭐⭐</div>
+          <div class="b2b-info">
+            <div class="b2b-info-item"><div class="b2b-info-val">Essentiel</div><div class="b2b-info-lbl">Forfait cible</div></div>
+            <div class="b2b-info-item"><div class="b2b-info-val">200K FCFA</div><div class="b2b-info-lbl">Potentiel/mois</div></div>
+            <div class="b2b-info-item"><div class="b2b-info-val">RDV prévu</div><div class="b2b-info-lbl">Statut</div></div>
+          </div>
+        </div>
+        <div class="b2b-card">
+          <div class="b2b-header"><div class="b2b-icon">🚢</div><div><div class="b2b-nom">Bolloré Logistics</div><div class="b2b-secteur">Transport & Logistique</div></div></div>
+          <span class="b2b-badge b-prosp">📞 En prospection</span>
+          <div class="etoiles">⭐⭐⭐⭐⭐</div>
+          <div class="b2b-info">
+            <div class="b2b-info-item"><div class="b2b-info-val">Premium</div><div class="b2b-info-lbl">Forfait cible</div></div>
+            <div class="b2b-info-item"><div class="b2b-info-val">800K FCFA</div><div class="b2b-info-lbl">Potentiel/mois</div></div>
+            <div class="b2b-info-item"><div class="b2b-info-val">En attente</div><div class="b2b-info-lbl">Contact</div></div>
+          </div>
+        </div>
+        <div class="b2b-card">
+          <div class="b2b-header"><div class="b2b-icon">✈️</div><div><div class="b2b-nom">Air France</div><div class="b2b-secteur">Aviation & Transport</div></div></div>
+          <span class="b2b-badge b-prosp">📞 En prospection</span>
+          <div class="etoiles">⭐⭐⭐⭐</div>
+          <div class="b2b-info">
+            <div class="b2b-info-item"><div class="b2b-info-val">Business</div><div class="b2b-info-lbl">Forfait cible</div></div>
+            <div class="b2b-info-item"><div class="b2b-info-val">400K FCFA</div><div class="b2b-info-lbl">Potentiel/mois</div></div>
+            <div class="b2b-info-item"><div class="b2b-info-val">En attente</div><div class="b2b-info-lbl">Contact</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
