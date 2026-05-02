@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNA — Paramètres</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--violet:#6B21A8;--violet-light:#9333EA;--violet-pale:#F3E8FF;--bg:#F8F9FC;--card:#FFFFFF;--text:#1E1B4B;--text-light:#6B7280;--green:#10B981;--red:#EF4444;--gold:#F59E0B;--shadow:0 2px 12px rgba(0,0,0,0.06)}
+    body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text)}
+    .sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:linear-gradient(180deg,var(--violet) 0%,#4A0080 100%);padding:20px;z-index:100;display:flex;flex-direction:column;overflow-y:auto}
+    .sidebar-logo{display:flex;align-items:center;gap:10px;margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.15)}
+    .sidebar-logo img{width:38px;height:38px;border-radius:10px;object-fit:cover}
+    .sidebar-logo-text{font-size:14px;font-weight:700;color:white}
+    .sidebar-logo-sub{font-size:10px;color:rgba(255,255,255,0.6)}
+    .menu-section{font-size:10px;font-weight:600;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin:18px 0 8px}
+    .menu-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;margin-bottom:3px;transition:all 0.2s}
+    .menu-item:hover{background:rgba(255,255,255,0.1);color:white}
+    .menu-item.active{background:rgba(255,255,255,0.2);color:white;font-weight:600}
+    .menu-icon{font-size:16px;width:22px}
+    .menu-badge{margin-left:auto;background:var(--red);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+    .sidebar-bottom{margin-top:auto;padding-top:20px;border-top:1px solid rgba(255,255,255,0.15)}
+    .sidebar-user{display:flex;align-items:center;gap:10px}
+    .user-avatar{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .user-name{font-size:12px;font-weight:600;color:white}
+    .user-role{font-size:10px;color:rgba(255,255,255,0.5)}
+    .main{margin-left:240px}
+    .topbar{background:white;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #F0F0F0;position:sticky;top:0;z-index:50}
+    .topbar-title{font-size:18px;font-weight:700}
+    .topbar-sub{font-size:12px;color:var(--text-light)}
+    .topbar-btn{padding:8px 18px;border-radius:10px;border:none;font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:var(--violet);color:white}
+    .content{padding:24px}
+    .param-section{background:var(--card);border-radius:16px;box-shadow:var(--shadow);border:1px solid #F0F0F0;overflow:hidden;margin-bottom:20px}
+    .param-header{padding:16px 20px;border-bottom:1px solid #F8F8F8;display:flex;align-items:center;gap:10px}
+    .param-header-icon{font-size:20px}
+    .param-title{font-size:14px;font-weight:700}
+    .param-row{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #F8F8F8}
+    .param-row:last-child{border-bottom:none}
+    .param-label{font-size:13px;font-weight:500;color:var(--text)}
+    .param-desc{font-size:11px;color:var(--text-light);margin-top:2px}
+    .param-val{font-size:14px;font-weight:700;color:var(--violet)}
+    .param-input{border:1.5px solid #E5E7EB;border-radius:8px;padding:6px 12px;font-family:'Poppins',sans-serif;font-size:13px;color:var(--text);background:white;width:120px;text-align:right}
+    .param-input:focus{outline:none;border-color:var(--violet)}
+    .toggle{width:44px;height:24px;border-radius:12px;background:#E5E7EB;position:relative;cursor:pointer;transition:background 0.3s;border:none}
+    .toggle.on{background:var(--violet)}
+    .toggle::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:white;top:3px;left:3px;transition:transform 0.3s;box-shadow:0 1px 4px rgba(0,0,0,0.2)}
+    .toggle.on::after{transform:translateX(20px)}
+    @media(max-width:768px){.sidebar{display:none}.main{margin-left:0}}
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-logo"><img src="https://raw.githubusercontent.com/dinabeni/dna-tracker/ed12391a53eda66f2d33609bbb8fccedf213cf4e/WhatsApp%20Image%202026-04-11%20at%2001.06.45.jpeg" alt="DNA"><div><div class="sidebar-logo-text">DNA Transport</div><div class="sidebar-logo-sub">Dashboard</div></div></div>
+    <div>
+      <div class="menu-section">Principal</div>
+      <a class="menu-item" href="dashboard.html"><span class="menu-icon">📊</span> Vue d'ensemble</a>
+      <a class="menu-item" href="dash-carte.html"><span class="menu-icon">🗺️</span> Carte en direct</a>
+      <a class="menu-item" href="dash-courses.html"><span class="menu-icon">🚕</span> Courses</a>
+      <div class="menu-section">Gestion</div>
+      <a class="menu-item" href="dash-chauffeurs.html"><span class="menu-icon">👤</span> Chauffeurs</a>
+      <a class="menu-item" href="dash-finances.html"><span class="menu-icon">💰</span> Finances</a>
+      <a class="menu-item" href="dash-wifi.html"><span class="menu-icon">📶</span> WiFi & Revenus</a>
+      <a class="menu-item" href="dash-b2b.html"><span class="menu-icon">🏢</span> Entreprises B2B</a>
+      <a class="menu-item" href="dash-rentabilite.html"><span class="menu-icon">📈</span> Rentabilité</a>
+      <div class="menu-section">Clients</div>
+      <a class="menu-item" href="dash-vip.html"><span class="menu-icon">👑</span> Clients VIP</a>
+      <a class="menu-item" href="dash-annulations.html"><span class="menu-icon">📉</span> Annulations</a>
+      <div class="menu-section">Outils</div>
+      <a class="menu-item" href="dash-alertes.html"><span class="menu-icon">🔔</span> Alertes</a>
+      <a class="menu-item" href="dash-rapports.html"><span class="menu-icon">📋</span> Rapports</a>
+      <a class="menu-item active" href="dash-parametres.html"><span class="menu-icon">⚙️</span> Paramètres</a>
+    </div>
+    <div class="sidebar-bottom"><div class="sidebar-user"><div class="user-avatar">👑</div><div><div class="user-name">Direction DNA</div><div class="user-role">Administrateur</div></div></div></div>
+  </div>
+  <div class="main">
+    <div class="topbar"><div><div class="topbar-title">⚙️ Paramètres DNA</div><div class="topbar-sub">Configuration complète du système</div></div><button class="topbar-btn">💾 Sauvegarder</button></div>
+    <div class="content">
+
+      <!-- TARIFICATION -->
+      <div class="param-section">
+        <div class="param-header"><div class="param-header-icon">💰</div><div class="param-title">Tarification & Commissions</div></div>
+        <div class="param-row"><div><div class="param-label">Commission DNA Move</div><div class="param-desc">Prélevée sur chaque course via le standard</div></div><input class="param-input" type="number" value="16"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">%</span></div>
+        <div class="param-row"><div><div class="param-label">Commission DNA Black</div><div class="param-desc">Prélevée sur chaque réservation premium</div></div><input class="param-input" type="number" value="22"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">%</span></div>
+        <div class="param-row"><div><div class="param-label">Prix WiFi</div><div class="param-desc">Tarif par connexion de 30 minutes</div></div><input class="param-input" type="number" value="200"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">FCFA</span></div>
+        <div class="param-row"><div><div class="param-label">Tarif de base course</div><div class="param-desc">Prise en charge fixe</div></div><input class="param-input" type="number" value="300"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">FCFA</span></div>
+        <div class="param-row"><div><div class="param-label">Prix par kilomètre</div><div class="param-desc">Tarif kilométrique DNA Move</div></div><input class="param-input" type="number" value="200"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">FCFA/km</span></div>
+        <div class="param-row"><div><div class="param-label">Course minimum</div><div class="param-desc">Prix plancher garanti</div></div><input class="param-input" type="number" value="500"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">FCFA</span></div>
+      </div>
+
+      <!-- ABONNEMENTS -->
+      <div class="param-section">
+        <div class="param-header"><div class="param-header-icon">📋</div><div class="param-title">Abonnements Chauffeurs</div></div>
+        <div class="param-row"><div><div class="param-label">Abonnement DNA Move</div><div class="param-desc">Mensualité chauffeur partenaire standard</div></div><input class="param-input" type="number" value="25000"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">FCFA</span></div>
+        <div class="param-row"><div><div class="param-label">Abonnement DNA Black</div><div class="param-desc">Mensualité chauffeur premium</div></div><input class="param-input" type="number" value="45000"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">FCFA</span></div>
+        <div class="param-row"><div><div class="param-label">Caution Move</div><div class="param-desc">Dépôt de garantie matériel (remboursable)</div></div><input class="param-input" type="number" value="50000"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">FCFA</span></div>
+        <div class="param-row"><div><div class="param-label">Caution Black</div><div class="param-desc">Dépôt de garantie premium (remboursable)</div></div><input class="param-input" type="number" value="75000"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">FCFA</span></div>
+      </div>
+
+      <!-- ANNULATIONS -->
+      <div class="param-section">
+        <div class="param-header"><div class="param-header-icon">📉</div><div class="param-title">Politique d'annulation</div></div>
+        <div class="param-row"><div><div class="param-label">Remboursement avant envoi chauffeur</div><div class="param-desc">% remboursé si annulation avant dispatch</div></div><input class="param-input" type="number" value="80"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">%</span></div>
+        <div class="param-row"><div><div class="param-label">Remboursement après envoi chauffeur</div><div class="param-desc">% remboursé si chauffeur déjà en route</div></div><input class="param-input" type="number" value="50"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">%</span></div>
+        <div class="param-row"><div><div class="param-label">Remboursement chauffeur arrivé</div><div class="param-desc">% remboursé si chauffeur déjà sur place</div></div><input class="param-input" type="number" value="0"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">%</span></div>
+      </div>
+
+      <!-- PROGRAMME FIDÉLITÉ -->
+      <div class="param-section">
+        <div class="param-header"><div class="param-header-icon">👑</div><div class="param-title">Programme Cercle DNA</div></div>
+        <div class="param-row"><div><div class="param-label">Seuil d'accès au Cercle</div><div class="param-desc">Nombre de courses pour rejoindre le Cercle VIP</div></div><input class="param-input" type="number" value="30"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">courses</span></div>
+        <div class="param-row"><div><div class="param-label">Réduction Bronze</div><div class="param-desc">Réduction accordée aux membres Bronze</div></div><input class="param-input" type="number" value="10"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">%</span></div>
+        <div class="param-row"><div><div class="param-label">Réduction Silver</div><div class="param-desc">Réduction accordée aux membres Silver</div></div><input class="param-input" type="number" value="15"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">%</span></div>
+        <div class="param-row"><div><div class="param-label">Réduction Gold</div><div class="param-desc">Réduction accordée aux membres Gold</div></div><input class="param-input" type="number" value="20"> <span style="font-size:13px;color:var(--text-light);margin-left:4px">%</span></div>
+      </div>
+
+      <!-- SYSTÈME -->
+      <div class="param-section">
+        <div class="param-header"><div class="param-header-icon">⚙️</div><div class="param-title">Système & Automatisations</div></div>
+        <div class="param-row"><div><div class="param-label">Rapport journalier automatique</div><div class="param-desc">Envoyé chaque soir à 21h via WhatsApp</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+        <div class="param-row"><div><div class="param-label">Alertes mauvaise note</div><div class="param-desc">Alerte si note chauffeur inférieure à 3/5</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+        <div class="param-row"><div><div class="param-label">Relances automatiques cotisations</div><div class="param-desc">SMS automatique le 5 et le 10 du mois</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+        <div class="param-row"><div><div class="param-label">WiFi payant activé</div><div class="param-desc">Activer/désactiver le service WiFi dans les taxis</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+        <div class="param-row"><div><div class="param-label">Mode maintenance</div><div class="param-desc">Désactive temporairement les réservations</div></div><button class="toggle" onclick="this.classList.toggle('on')"></button></div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
