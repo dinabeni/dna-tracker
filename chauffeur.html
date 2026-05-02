@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNA Transport — App Chauffeur</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: Arial, sans-serif;
+      background: #1a0033;
+      color: white;
+      min-height: 100vh;
+      padding-bottom: 30px;
+    }
+    
+    .header {
+      background: #6600cc;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .logo { font-size: 24px; font-weight: bold; }
+    .logo-sub { font-size: 12px; color: #cc99ff; margin-top: 3px; }
+    
+    .chauffeur-badge {
+      background: #2d0066;
+      margin: 15px;
+      border-radius: 15px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .avatar {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: #6600cc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+    
+    .chauffeur-nom { font-size: 17px; font-weight: bold; }
+    .chauffeur-id { font-size: 12px; color: #9966cc; margin-top: 3px; }
+    
+    .statut-badge {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-top: 5px;
+      display: inline-block;
+    }
+    
+    .badge-hors-ligne { background: #3d0080; color: #9966cc; }
+    .badge-disponible { background: #006633; color: #00ff99; }
+    .badge-en-route { background: #003380; color: #66aaff; }
+    .badge-client-bord { background: #804400; color: #ffaa00; }
+    
+    .section-statut {
+      margin: 15px;
+      background: #2d0066;
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .grand-cercle {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 55px;
+      transition: all 0.5s;
+    }
+    
+    .cercle-hors-ligne {
+      background: #1a0033;
+      border: 4px solid #3d0080;
+    }
+    
+    .cercle-disponible {
+      background: #003322;
+      border: 4px solid #00cc66;
+      animation: pulseVert 2s infinite;
+    }
+    
+    .cercle-en-route {
+      background: #001133;
+      border: 4px solid #0066cc;
+      animation: pulseBleu 1.5s infinite;
+    }
+    
+    .cercle-client-bord {
+      background: #332200;
+      border: 4px solid #ffaa00;
+      animation: pulseOrange 1.5s infinite;
+    }
+    
+    @keyframes pulseVert {
+      0% { box-shadow: 0 0 0 0 rgba(0,204,102,0.4); }
+      70% { box-shadow: 0 0 0 20px rgba(0,204,102,0); }
+      100% { box-shadow: 0 0 0 0 rgba(0,204,102,0); }
+    }
+    
+    @keyframes pulseBleu {
+      0% { box-shadow: 0 0 0 0 rgba(0,102,204,0.4); }
+      70% { box-shadow: 0 0 0 20px rgba(0,102,204,0); }
+      100% { box-shadow: 0 0 0 0 rgba(0,102,204,0); }
+    }
+    
+    @keyframes pulseOrange {
+      0% { box-shadow: 0 0 0 0 rgba(255,170,0,0.4); }
+      70% { box-shadow: 0 0 0 20px rgba(255,170,0,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,170,0,0); }
+    }
+    
+    .statut-titre {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    
+    .statut-description {
+      font-size: 13px;
+      color: #9966cc;
+      margin-bottom: 5px;
+    }
+    
+    .gps-info {
+      font-size: 11px;
+      color: #6633aa;
+      margin-top: 8px;
+    }
+    
+    .section-boutons {
+      margin: 0 15px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .btn {
+      border: none;
+      padding: 18px;
+      border-radius: 15px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .btn:active { transform: scale(0.97); }
+    
+    .btn-disponible {
+      background: #00cc66;
+      color: white;
+    }
+    
+    .btn-en-route {
+      background: #0066cc;
+      color: white;
+    }
+    
+    .btn-client-bord {
+      background: #ffaa00;
+      color: #1a0033;
+    }
+    
+    .btn-terminer {
+      background: #cc0000;
+      color: white;
+    }
+    
+    .btn-desactiver {
+      background: #3d0080;
+      color: #9966cc;
+      border: 2px solid #6600cc;
+    }
+    
+    .btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    
+    .section-stats {
+      margin: 0 15px 15px;
+      background: #2d0066;
+      border-radius: 15px;
+      padding: 15px;
+    }
+    
+    .stats-titre {
+      font-size: 14px;
+      font-weight: bold;
+      color: #cc99ff;
+      margin-bottom: 15px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    
+    .stat-item {
+      background: #1a0033;
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+    
+    .stat-valeur {
+      font-size: 26px;
+      font-weight: bold;
+      color: #00ff99;
+    }
+    
+    .stat-label {
+      font-size: 11px;
+      color: #6633aa;
+      margin-top: 3px;
+    }
+    
+    .course-info {
+      background: #1a0033;
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 10px;
+      display: none;
+    }
+    
+    .course-ligne {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid #2d0066;
+      font-size: 13px;
+    }
+    
+    .course-ligne:last-child { border-bottom: none; }
+    .course-label { color: #9966cc; }
+    .course-valeur { color: #cc99ff; font-weight: bold; }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #6600cc;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: bold;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 5px 20px rgba(102,0,204,0.5);
+    }
+    
+    .alerte-course {
+      background: #003380;
+      border: 2px solid #0066cc;
+      border-radius: 15px;
+      padding: 15px;
+      margin: 0 15px 15px;
+      display: none;
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    .alerte-titre {
+      font-size: 16px;
+      font-weight: bold;
+      color: #66aaff;
+      margin-bottom: 10px;
+    }
+    
+    .alerte-detail {
+      font-size: 13px;
+      color: #99ccff;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NOTIFICATION TOAST -->
+  <div class="notification" id="notification">✅ Statut mis à jour</div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">🧬 DNA Transport</div>
+    <div class="logo-sub">Application Chauffeur Partenaire</div>
+  </div>
+
+  <!-- BADGE CHAUFFEUR -->
+  <div class="chauffeur-badge">
+    <div class="avatar">👤</div>
+    <div>
+      <div class="chauffeur-nom" id="nomChauffeur">Chargement...</div>
+      <div class="chauffeur-id" id="idChauffeur">DNA-XXX</div>
+      <div class="statut-badge badge-hors-ligne" id="statutBadge">
+        ⚫ Hors ligne
+      </div>
+    </div>
+  </div>
+
+  <!-- ALERTE NOUVELLE COURSE -->
+  <div class="alerte-course" id="alerteCourse">
+    <div class="alerte-titre">🔔 Nouvelle course assignée !</div>
+    <div class="alerte-detail" id="alerteDetail">
+      📍 Départ : --<br>
+      🏁 Arrivée : --<br>
+      💰 Prix : -- FCFA<br>
+      👤 Client : --
+    </div>
+  </div>
+
+  <!-- SECTION STATUT PRINCIPAL -->
+  <div class="section-statut">
+    <div class="grand-cercle cercle-hors-ligne" id="grandCercle">
+      🚕
+    </div>
+    <div class="statut-titre" id="statutTitre">Hors ligne</div>
+    <div class="statut-description" id="statutDescription">
+      Appuyez sur "Je suis disponible" pour commencer
+    </div>
+    <div class="gps-info" id="gpsInfo">GPS : En attente...</div>
+  </div>
+
+  <!-- BOUTONS DE STATUT -->
+  <div class="section-boutons">
+
+    <!-- BOUTON 1 : DISPONIBLE -->
+    <button class="btn btn-disponible" id="btnDisponible" onclick="changerStatut('DISPONIBLE')">
+      🟢 Je suis disponible
+    </button>
+
+    <!-- BOUTON 2 : EN ROUTE VERS CLIENT -->
+    <button class="btn btn-en-route" id="btnEnRoute" onclick="changerStatut('EN_ROUTE')" disabled>
+      🔵 En route vers le client
+    </button>
+
+    <!-- BOUTON 3 : CLIENT À BORD -->
+    <button class="btn btn-client-bord" id="btnClientBord" onclick="changerStatut('CLIENT_BORD')" disabled>
+      🟡 Client à bord
+    </button>
+
+    <!-- BOUTON 4 : COURSE TERMINÉE -->
+    <button class="btn btn-terminer" id="btnTerminer" onclick="changerStatut('COURSE_TERMINEE')" disabled>
+      ✅ Course terminée
+    </button>
+
+    <!-- BOUTON 5 : FIN DE JOURNÉE -->
+    <button class="btn btn-desactiver" id="btnFinJournee" onclick="changerStatut('HORS_LIGNE')" disabled>
+      ⚫ Terminer ma journée
+    </button>
+
+  </div>
+
+  <!-- INFO COURSE EN COURS -->
+  <div class="course-info" id="courseInfo">
+    <div class="course-ligne">
+      <span class="course-label">N° Course</span>
+      <span class="course-valeur" id="courseId">--</span>
+    </div>
+    <div class="course-ligne">
+      <span class="course-label">Départ</span>
+      <span class="course-valeur" id="courseDepart">--</span>
+    </div>
+    <div class="course-ligne">
+      <span class="course-label">Arrivée</span>
+      <span class="course-valeur" id="courseArrivee">--</span>
+    </div>
+    <div class="course-ligne">
+      <span class="course-label">Prix</span>
+      <span class="course-valeur" id="coursePrix">--</span>
+    </div>
+    <div class="course-ligne">
+      <span class="course-label">Client</span>
+      <span class="course-valeur" id="courseClient">--</span>
+    </div>
+  </div>
+
+  <!-- STATS DU JOUR -->
+  <div class="section-stats">
+    <div class="stats-titre">📊 Ma journée</div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-valeur" id="statCourses">0</div>
+        <div class="stat-label">Courses</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-valeur" id="statGains">0</div>
+        <div class="stat-label">FCFA gagnés</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-valeur" id="statWifi">0</div>
+        <div class="stat-label">WiFi vendus</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-valeur" id="statNote">--</div>
+        <div class="stat-label">Note moyenne</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════
+    // CONFIGURATION DNA
+    // ═══════════════════════════════════════
+    
+    const N8N_WEBHOOK = 'https://TON_N8N_URL/webhook/dna-chauffeur';
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const CHAUFFEUR_ID = urlParams.get('id') || 'DNA-001';
+    const CHAUFFEUR_NOM = urlParams.get('nom') || 'Chauffeur DNA';
+    
+    // ═══════════════════════════════════════
+    // VARIABLES
+    // ═══════════════════════════════════════
+    
+    let statutActuel = 'HORS_LIGNE';
+    let watchId = null;
+    let intervalGPS = null;
+    let derniereLat = null;
+    let derniereLng = null;
+    let courseActuelle = null;
+    let statsJour = { courses: 0, gains: 0, wifi: 0 };
+    
+    // ═══════════════════════════════════════
+    // INITIALISATION
+    // ═══════════════════════════════════════
+    
+    document.getElementById('nomChauffeur').textContent = CHAUFFEUR_NOM;
+    document.getElementById('idChauffeur').textContent = CHAUFFEUR_ID;
+    
+    // Vérifier s'il y a une course en cours
+    verifierCourseEnCours();
+    
+    // ═══════════════════════════════════════
+    // CHANGER LE STATUT
+    // ═══════════════════════════════════════
+    
+    function changerStatut(nouveauStatut) {
+      
+      switch(nouveauStatut) {
+        
+        case 'DISPONIBLE':
+          statutActuel = 'DISPONIBLE';
+          activerGPS();
+          mettreAJourInterface({
+            cercle: 'cercle-disponible',
+            emoji: '🟢',
+            titre: 'Disponible ✅',
+            description: 'Vous êtes visible. DNA peut vous envoyer des clients.',
+            badge: { classe: 'badge-disponible', texte: '🟢 Disponible' },
+            boutons: {
+              disponible: false,
+              enRoute: false,
+              clientBord: false,
+              terminer: false,
+              finJournee: true
+            }
+          });
+          break;
+          
+        case 'EN_ROUTE':
+          statutActuel = 'EN_ROUTE';
+          mettreAJourInterface({
+            cercle: 'cercle-en-route',
+            emoji: '🔵',
+            titre: 'En route vers le client',
+            description: 'Le client suit votre position en temps réel.',
+            badge: { classe: 'badge-en-route', texte: '🔵 En route' },
+            boutons: {
+              disponible: false,
+              enRoute: false,
+              clientBord: true,
+              terminer: false,
+              finJournee: false
+            }
+          });
+          afficherCourseInfo(true);
+          break;
+          
+        case 'CLIENT_BORD':
+          statutActuel = 'CLIENT_BORD';
+          mettreAJourInterface({
+            cercle: 'cercle-client-bord',
+            emoji: '🟡',
+            titre: 'Client à bord 🚕',
+            description: 'Bonne route ! Déposez le client à destination.',
+            badge: { classe: 'badge-client-bord', texte: '🟡 Course en cours' },
+            boutons: {
+              disponible: false,
+              enRoute: false,
+              clientBord: false,
+              terminer: true,
+              finJournee: false
+            }
+          });
+          break;
+          
+        case 'COURSE_TERMINEE':
+          // Mettre à jour les stats
+          statsJour.courses++;
+          if (courseActuelle && courseActuelle.prix) {
+            const gain = courseActuelle.prix * 0.84;
+            statsJour.gains += gain;
+          }
+          mettreAJourStats();
+          
+          statutActuel = 'DISPONIBLE';
+          courseActuelle = null;
+          afficherCourseInfo(false);
+          document.getElementById('alerteCourse').style.display = 'none';
+          
+          mettreAJourInterface({
+            cercle: 'cercle-disponible',
+            emoji: '🟢',
+            titre: 'Course terminée ! ✅',
+            description: 'Excellent travail ! Vous êtes à nouveau disponible.',
+            badge: { classe: 'badge-disponible', texte: '🟢 Disponible' },
+            boutons: {
+              disponible: false,
+              enRoute: false,
+              clientBord: false,
+              terminer: false,
+              finJournee: true
+            }
+          });
+          
+          afficherNotification('✅ Course terminée ! Bien joué !');
+          break;
+          
+        case 'HORS_LIGNE':
+          statutActuel = 'HORS_LIGNE';
+          desactiverGPS();
+          afficherCourseInfo(false);
+          
+          mettreAJourInterface({
+            cercle: 'cercle-hors-ligne',
+            emoji: '🚕',
+            titre: 'Bonne journée ! 🌙',
+            description: 'Vous êtes hors ligne. À demain !',
+            badge: { classe: 'badge-hors-ligne', texte: '⚫ Hors ligne' },
+            boutons: {
+              disponible: true,
+              enRoute: false,
+              clientBord: false,
+              terminer: false,
+              finJournee: false
+            }
+          });
+          break;
+      }
+      
+      // Envoyer le nouveau statut à n8n
+      envoyerStatut(nouveauStatut);
+    }
+    
+    // ═══════════════════════════════════════
+    // METTRE À JOUR L'INTERFACE
+    // ═══════════════════════════════════════
+    
+    function mettreAJourInterface(config) {
+      // Cercle
+      const cercle = document.getElementById('grandCercle');
+      cercle.className = 'grand-cercle ' + config.cercle;
+      cercle.textContent = config.emoji;
+      
+      // Textes
+      document.getElementById('statutTitre').textContent = config.titre;
+      document.getElementById('statutDescription').textContent = config.description;
+      
+      // Badge
+      const badge = document.getElementById('statutBadge');
+      badge.className = 'statut-badge ' + config.badge.classe;
+      badge.textContent = config.badge.texte;
+      
+      // Boutons
+      const b = config.boutons;
+      setBouton('btnDisponible', b.disponible);
+      setBouton('btnEnRoute', b.enRoute);
+      setBouton('btnClientBord', b.clientBord);
+      setBouton('btnTerminer', b.terminer);
+      setBouton('btnFinJournee', b.finJournee);
+    }
+    
+    function setBouton(id, actif) {
+      const btn = document.getElementById(id);
+      btn.disabled = !actif;
+      btn.style.opacity = actif ? '1' : '0.3';
+    }
+    
+    // ═══════════════════════════════════════
+    // GPS
+    // ═══════════════════════════════════════
+    
+    function activerGPS() {
+      if (!navigator.geolocation) return;
+      
+      watchId = navigator.geolocation.watchPosition(
+        (pos) => {
+          derniereLat = pos.coords.latitude;
+          derniereLng = pos.coords.longitude;
+          document.getElementById('gpsInfo').textContent = 
+            `📍 GPS actif : ${derniereLat.toFixed(4)}, ${derniereLng.toFixed(4)}`;
+        },
+        (err) => {
+          document.getElementById('gpsInfo').textContent = 
+            '⚠️ Activez le GPS de votre téléphone';
+        },
+        { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
+      );
+      
+      intervalGPS = setInterval(() => {
+        if (derniereLat && derniereLng && statutActuel !== 'HORS_LIGNE') {
+          envoyerPosition();
+        }
+      }, 10000);
+    }
+    
+    function desactiverGPS() {
+      if (watchId) navigator.geolocation.clearWatch(watchId);
+      if (intervalGPS) clearInterval(intervalGPS);
+      document.getElementById('gpsInfo').textContent = 'GPS : Désactivé';
+    }
+    
+    // ═══════════════════════════════════════
+    // ENVOYER À N8N
+    // ═══════════════════════════════════════
+    
+    async function envoyerStatut(statut) {
+      try {
+        await fetch(N8N_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'STATUT',
+            chauffeur_id: CHAUFFEUR_ID,
+            chauffeur_nom: CHAUFFEUR_NOM,
+            statut: statut,
+            latitude: derniereLat,
+            longitude: derniereLng,
+            timestamp: new Date().toISOString()
+          })
+        });
+        afficherNotification('✅ Statut mis à jour : ' + statut);
+      } catch(e) {
+        console.log('Envoi en attente...');
+      }
+    }
+    
+    async function envoyerPosition() {
+      try {
+        await fetch(N8N_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'POSITION',
+            chauffeur_id: CHAUFFEUR_ID,
+            statut: statutActuel,
+            latitude: derniereLat,
+            longitude: derniereLng,
+            course_id: courseActuelle ? courseActuelle.id : null,
+            timestamp: new Date().toISOString()
+          })
+        });
+      } catch(e) {
+        console.log('Position en attente...');
+      }
+    }
+    
+    // ═══════════════════════════════════════
+    // VÉRIFIER SI UNE COURSE EST EN COURS
+    // ═══════════════════════════════════════
+    
+    async function verifierCourseEnCours() {
+      try {
+        const response = await fetch(
+          N8N_WEBHOOK + '?action=get-course&chauffeur=' + CHAUFFEUR_ID
+        );
+        const data = await response.json();
+        
+        if (data && data.course_id) {
+          courseActuelle = data;
+          afficherAlerteCourse(data);
+          
+          // Activer automatiquement "En route"
+          document.getElementById('btnEnRoute').disabled = false;
+          document.getElementById('btnEnRoute').style.opacity = '1';
+        }
+      } catch(e) {
+        console.log('Vérification course...');
+      }
+    }
+    
+    // ═══════════════════════════════════════
+    // AFFICHER LES INFOS DE COURSE
+    // ═══════════════════════════════════════
+    
+    function afficherAlerteCourse(course) {
+      const alerte = document.getElementById('alerteCourse');
+      const detail = document.getElementById('alerteDetail');
+      
+      detail.innerHTML = `
+        📍 Départ : <strong>${course.depart || '--'}</strong><br>
+        🏁 Arrivée : <strong>${course.arrivee || '--'}</strong><br>
+        💰 Prix : <strong>${course.prix || '--'} FCFA</strong><br>
+        👤 Client : <strong>${course.client_tel || '--'}</strong>
+      `;
+      
+      alerte.style.display = 'block';
+      
+      // Remplir les infos de course
+      document.getElementById('courseId').textContent = course.course_id || '--';
+      document.getElementById('courseDepart').textContent = course.depart || '--';
+      document.getElementById('courseArrivee').textContent = course.arrivee || '--';
+      document.getElementById('coursePrix').textContent = (course.prix || '--') + ' FCFA';
+      document.getElementById('courseClient').textContent = course.client_tel || '--';
+    }
+    
+    function afficherCourseInfo(visible) {
+      document.getElementById('courseInfo').style.display = visible ? 'block' : 'none';
+    }
+    
+    // ═══════════════════════════════════════
+    // STATS
+    // ═══════════════════════════════════════
+    
+    function mettreAJourStats() {
+      document.getElementById('statCourses').textContent = statsJour.courses;
+      document.getElementById('statGains').textContent = 
+        statsJour.gains.toFixed(0);
+    }
+    
+    // ═══════════════════════════════════════
+    // NOTIFICATION
+    // ═══════════════════════════════════════
+    
+    function afficherNotification(message) {
+      const notif = document.getElementById('notification');
+      notif.textContent = message;
+      notif.style.display = 'block';
+      setTimeout(() => { notif.style.display = 'none'; }, 3000);
+    }
+    
+    // Vérifier les nouvelles courses toutes les 15 secondes
+    setInterval(verifierCourseEnCours, 15000);
+    
+  </script>
+</body>
+</html>
