@@ -3,304 +3,306 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DNA Transport — Votre course</title>
+  <title>DNA Transport — Suivre ma course</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     :root {
-      --violet: #7B2FBE;
-      --violet-dark: #4A0080;
-      --violet-light: #9B59D0;
-      --violet-glow: rgba(123, 47, 190, 0.3);
-      --gold: #FFD700;
-      --green: #00E676;
-      --bg: #0D0018;
-      --card: rgba(255,255,255,0.05);
-      --card-border: rgba(123,47,190,0.3);
+      --violet: #6B21A8;
+      --violet-light: #9333EA;
+      --violet-pale: #F3E8FF;
+      --violet-medium: #E9D5FF;
+      --bg: #FAF5FF;
+      --card: #FFFFFF;
+      --text: #1E1B4B;
+      --text-light: #6B7280;
+      --green: #10B981;
+      --gold: #F59E0B;
+      --shadow: 0 4px 24px rgba(107,33,168,0.12);
+      --shadow-lg: 0 20px 60px rgba(107,33,168,0.2);
     }
-
     body {
       font-family: 'Poppins', sans-serif;
       background: var(--bg);
-      color: white;
+      color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* FOND ANIMÉ */
+    /* FOND DÉGRADÉ DOUX */
     body::before {
       content: '';
       position: fixed;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: 
-        radial-gradient(ellipse at 20% 20%, rgba(123,47,190,0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(74,0,128,0.2) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 50%, rgba(155,89,208,0.05) 0%, transparent 70%);
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(ellipse at 0% 0%, rgba(147,51,234,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 100% 100%, rgba(107,33,168,0.06) 0%, transparent 60%);
       z-index: 0;
-      animation: bgMove 8s ease-in-out infinite alternate;
+      pointer-events: none;
     }
 
-    @keyframes bgMove {
-      0% { transform: translate(0, 0) rotate(0deg); }
-      100% { transform: translate(20px, 20px) rotate(2deg); }
-    }
-
-    /* PARTICULES FLOTTANTES */
-    .particle {
-      position: fixed;
-      border-radius: 50%;
-      background: var(--violet-light);
-      opacity: 0.1;
-      animation: float linear infinite;
-      z-index: 0;
-    }
-
-    @keyframes float {
-      0% { transform: translateY(100vh) scale(0); opacity: 0; }
-      10% { opacity: 0.1; }
-      90% { opacity: 0.1; }
-      100% { transform: translateY(-100px) scale(1); opacity: 0; }
-    }
-
-    /* CONTENU */
-    .content {
-      position: relative;
-      z-index: 1;
-      padding-bottom: 40px;
-    }
+    .content { position: relative; z-index: 1; padding-bottom: 40px; }
 
     /* HEADER */
     .header {
-      padding: 20px 20px 15px;
+      background: white;
+      padding: 16px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: linear-gradient(180deg, rgba(123,47,190,0.3) 0%, transparent 100%);
-      border-bottom: 1px solid var(--card-border);
+      box-shadow: 0 2px 12px rgba(107,33,168,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
-    .header-left { display: flex; align-items: center; gap: 12px; }
-
-    .dna-logo {
-      width: 42px;
-      height: 42px;
-      background: linear-gradient(135deg, var(--violet), var(--violet-dark));
-      border-radius: 12px;
+    .header-logo {
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      box-shadow: 0 0 20px var(--violet-glow);
+      gap: 10px;
     }
 
-    .logo-text { font-size: 18px; font-weight: 700; }
-    .logo-sub { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: -2px; }
+    .logo-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 2px 8px rgba(107,33,168,0.2);
+    }
+
+    .logo-texte { font-size: 16px; font-weight: 700; color: var(--violet); }
+    .logo-sub { font-size: 10px; color: var(--text-light); margin-top: -2px; }
 
     .live-badge {
       display: flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255,59,59,0.15);
-      border: 1px solid rgba(255,59,59,0.4);
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
       padding: 6px 12px;
       border-radius: 20px;
     }
-
     .live-dot {
-      width: 8px;
-      height: 8px;
+      width: 8px; height: 8px;
       border-radius: 50%;
-      background: #ff3b3b;
+      background: #EF4444;
       animation: blink 1s infinite;
     }
-
-    .live-text { font-size: 12px; font-weight: 600; color: #ff6b6b; }
-
+    .live-text { font-size: 11px; font-weight: 700; color: #EF4444; }
     @keyframes blink {
-      0%, 100% { opacity: 1; box-shadow: 0 0 8px #ff3b3b; }
-      50% { opacity: 0.3; box-shadow: none; }
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
     }
 
-    /* HERO SECTION */
+    /* HERO */
     .hero {
-      padding: 25px 20px 20px;
+      padding: 30px 20px 20px;
       text-align: center;
     }
 
-    .eta-hero {
-      font-size: 72px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #fff 0%, var(--violet-light) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1;
-      margin-bottom: 5px;
+    .hero-label {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-bottom: 8px;
     }
 
-    .eta-unit { font-size: 22px; font-weight: 500; color: rgba(255,255,255,0.6); }
-    .eta-label { font-size: 14px; color: rgba(255,255,255,0.5); margin-top: 5px; }
+    .eta-cercle {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--violet), var(--violet-light));
+      margin: 0 auto 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 40px rgba(107,33,168,0.35);
+      animation: pulseEta 3s infinite;
+    }
+
+    @keyframes pulseEta {
+      0%, 100% { box-shadow: 0 10px 40px rgba(107,33,168,0.35); }
+      50% { box-shadow: 0 10px 60px rgba(107,33,168,0.55); }
+    }
+
+    .eta-number {
+      font-size: 46px;
+      font-weight: 800;
+      color: white;
+      line-height: 1;
+    }
+
+    .eta-unit {
+      font-size: 14px;
+      color: rgba(255,255,255,0.8);
+      font-weight: 500;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
 
     /* CARTE */
     .map-container {
       margin: 0 20px 20px;
-      border-radius: 24px;
+      border-radius: 20px;
       overflow: hidden;
-      border: 1px solid var(--card-border);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px var(--violet-glow);
-      position: relative;
+      box-shadow: var(--shadow-lg);
+      border: 2px solid var(--violet-medium);
     }
 
-    #map { height: 280px; }
-
-    .map-overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 80px;
-      background: linear-gradient(0deg, var(--bg) 0%, transparent 100%);
-      pointer-events: none;
-      z-index: 500;
-    }
+    #map { height: 260px; }
 
     /* CARD CHAUFFEUR */
     .card-chauffeur {
       margin: 0 20px 15px;
       background: var(--card);
-      border: 1px solid var(--card-border);
       border-radius: 20px;
       padding: 18px;
       display: flex;
       align-items: center;
-      gap: 15px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      gap: 14px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--violet-medium);
     }
 
-    .avatar-container { position: relative; flex-shrink: 0; }
+    .avatar-wrap { position: relative; flex-shrink: 0; }
 
     .avatar {
-      width: 60px;
-      height: 60px;
-      border-radius: 18px;
-      background: linear-gradient(135deg, var(--violet), var(--violet-dark));
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--violet), var(--violet-light));
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
-      box-shadow: 0 0 20px var(--violet-glow);
+      font-size: 26px;
     }
 
-    .avatar-online {
+    .online-dot {
       position: absolute;
-      bottom: -3px;
-      right: -3px;
-      width: 16px;
-      height: 16px;
+      bottom: -3px; right: -3px;
+      width: 14px; height: 14px;
       border-radius: 50%;
       background: var(--green);
-      border: 3px solid var(--bg);
-      box-shadow: 0 0 10px var(--green);
+      border: 2px solid white;
     }
 
-    .chauffeur-info { flex: 1; }
-    .chauffeur-nom { font-size: 16px; font-weight: 700; margin-bottom: 3px; }
+    .chauffeur-nom { font-size: 15px; font-weight: 700; color: var(--text); }
+    .chauffeur-car { font-size: 12px; color: var(--text-light); margin: 2px 0 5px; }
 
-    .chauffeur-vehicule {
-      font-size: 12px;
-      color: rgba(255,255,255,0.5);
-      margin-bottom: 6px;
-    }
-
-    .stars-container { display: flex; align-items: center; gap: 5px; }
     .stars { color: var(--gold); font-size: 13px; }
-    .note { font-size: 13px; font-weight: 600; color: var(--gold); }
+    .note-val { font-size: 13px; font-weight: 600; color: var(--gold); margin-left: 4px; }
 
-    .btn-call {
-      width: 46px;
-      height: 46px;
-      border-radius: 15px;
-      background: linear-gradient(135deg, var(--green), #00a854);
+    .btn-appel {
+      width: 46px; height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--green), #059669);
       border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       font-size: 20px;
       cursor: pointer;
+      margin-left: auto;
       flex-shrink: 0;
-      box-shadow: 0 5px 20px rgba(0,230,118,0.3);
+      box-shadow: 0 4px 15px rgba(16,185,129,0.3);
       transition: transform 0.2s;
     }
+    .btn-appel:active { transform: scale(0.9); }
 
-    .btn-call:active { transform: scale(0.9); }
-
-    /* STATS CARDS */
-    .stats-row {
-      display: flex;
-      gap: 12px;
+    /* STATS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
       margin: 0 20px 15px;
     }
 
-    .stat-card {
-      flex: 1;
+    .stat-box {
       background: var(--card);
-      border: 1px solid var(--card-border);
       border-radius: 16px;
-      padding: 14px;
+      padding: 14px 10px;
       text-align: center;
-      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--violet-pale);
     }
 
-    .stat-icon { font-size: 20px; margin-bottom: 5px; }
-    .stat-value { font-size: 20px; font-weight: 700; color: var(--violet-light); }
-    .stat-label { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+    .stat-icon { font-size: 22px; margin-bottom: 4px; }
+    .stat-val { font-size: 18px; font-weight: 700; color: var(--violet); }
+    .stat-lbl { font-size: 10px; color: var(--text-light); margin-top: 2px; }
+
+    /* COURSE INFO */
+    .course-card {
+      margin: 0 20px 15px;
+      background: linear-gradient(135deg, var(--violet), var(--violet-light));
+      border-radius: 20px;
+      padding: 18px;
+      color: white;
+    }
+
+    .course-title {
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+    }
+
+    .course-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      font-size: 13px;
+    }
+    .course-row:last-child { border-bottom: none; }
+    .course-key { opacity: 0.75; }
+    .course-val { font-weight: 600; }
 
     /* TIMELINE */
     .timeline-card {
       margin: 0 20px 15px;
       background: var(--card);
-      border: 1px solid var(--card-border);
       border-radius: 20px;
       padding: 18px;
-      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--violet-pale);
     }
 
-    .timeline-title {
-      font-size: 13px;
+    .tl-title {
+      font-size: 12px;
       font-weight: 600;
-      color: rgba(255,255,255,0.5);
+      color: var(--text-light);
       text-transform: uppercase;
       letter-spacing: 1px;
       margin-bottom: 18px;
     }
 
-    .timeline-item {
+    .tl-item {
       display: flex;
       gap: 14px;
       position: relative;
+      margin-bottom: 18px;
     }
 
-    .timeline-item:not(:last-child) { margin-bottom: 18px; }
+    .tl-item:last-child { margin-bottom: 0; }
 
-    .timeline-item:not(:last-child)::before {
+    .tl-item:not(:last-child)::before {
       content: '';
       position: absolute;
       left: 9px;
-      top: 20px;
+      top: 22px;
       bottom: -18px;
       width: 2px;
-      background: linear-gradient(180deg, var(--violet) 0%, rgba(123,47,190,0.1) 100%);
+      background: linear-gradient(180deg, var(--violet-light) 0%, var(--violet-pale) 100%);
     }
 
     .tl-dot {
-      width: 20px;
-      height: 20px;
+      width: 20px; height: 20px;
       border-radius: 50%;
       flex-shrink: 0;
       display: flex;
@@ -308,161 +310,134 @@
       justify-content: center;
       font-size: 10px;
       margin-top: 2px;
-    }
-
-    .tl-done {
-      background: var(--green);
-      box-shadow: 0 0 10px rgba(0,230,118,0.5);
-    }
-
-    .tl-current {
-      background: var(--violet);
-      box-shadow: 0 0 15px var(--violet-glow);
-      animation: pulseViolet 2s infinite;
-    }
-
-    .tl-pending {
-      background: rgba(255,255,255,0.1);
-      border: 2px solid rgba(255,255,255,0.1);
-    }
-
-    @keyframes pulseViolet {
-      0%, 100% { box-shadow: 0 0 10px var(--violet-glow); }
-      50% { box-shadow: 0 0 25px var(--violet-glow); }
-    }
-
-    .tl-content { flex: 1; }
-
-    .tl-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .tl-title.pending { color: rgba(255,255,255,0.3); }
-
-    .tl-sub {
-      font-size: 11px;
-      color: rgba(255,255,255,0.4);
-    }
-
-    .tl-time {
-      font-size: 11px;
-      color: var(--violet-light);
-      font-weight: 600;
-    }
-
-    /* BOUTON PRINCIPAL */
-    .btn-main {
-      margin: 0 20px 12px;
-      padding: 18px;
-      border-radius: 18px;
-      border: none;
-      font-family: 'Poppins', sans-serif;
-      font-size: 16px;
       font-weight: 700;
-      cursor: pointer;
-      width: calc(100% - 40px);
+    }
+
+    .tl-done { background: var(--green); color: white; }
+    .tl-active {
+      background: var(--violet);
+      color: white;
+      animation: glowDot 2s infinite;
+    }
+    @keyframes glowDot {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(107,33,168,0.4); }
+      50% { box-shadow: 0 0 0 8px rgba(107,33,168,0); }
+    }
+    .tl-pending { background: var(--violet-pale); border: 2px solid var(--violet-medium); }
+
+    .tl-text { font-size: 13px; font-weight: 600; color: var(--text); }
+    .tl-text.pending { color: var(--text-light); font-weight: 400; }
+    .tl-sub { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+    .tl-eta { font-size: 11px; font-weight: 600; color: var(--violet-light); }
+
+    /* BOUTONS */
+    .btn-primary {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      transition: all 0.3s;
-    }
-
-    .btn-call-main {
-      background: linear-gradient(135deg, var(--violet), var(--violet-dark));
-      color: white;
-      box-shadow: 0 10px 30px var(--violet-glow);
-    }
-
-    .btn-call-main:active { transform: scale(0.97); }
-
-    .btn-problem {
-      background: transparent;
-      color: rgba(255,255,255,0.4);
-      border: 1px solid rgba(255,255,255,0.1) !important;
-      font-size: 14px;
-    }
-
-    /* INFO COURSE */
-    .course-banner {
-      margin: 0 20px 15px;
-      background: linear-gradient(135deg, rgba(123,47,190,0.2), rgba(74,0,128,0.2));
-      border: 1px solid rgba(123,47,190,0.4);
+      width: calc(100% - 40px);
+      margin: 0 20px 12px;
+      padding: 17px;
       border-radius: 16px;
-      padding: 15px;
+      border: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--violet), var(--violet-light));
+      color: white;
+      box-shadow: 0 8px 25px rgba(107,33,168,0.3);
+      transition: all 0.2s;
     }
+    .btn-primary:active { transform: scale(0.97); }
 
-    .course-row {
+    .btn-secondary {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 6px 0;
+      justify-content: center;
+      gap: 10px;
+      width: calc(100% - 40px);
+      margin: 0 20px 12px;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1.5px solid var(--violet-medium);
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      background: white;
+      color: var(--violet);
+      transition: all 0.2s;
     }
 
-    .course-row:not(:last-child) {
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .course-key { font-size: 12px; color: rgba(255,255,255,0.4); }
-    .course-val { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); }
-
-    /* DNA WATERMARK */
-    .dna-watermark {
+    /* ARRIVEE BANNER */
+    .arrivee-banner {
+      margin: 0 20px 15px;
+      background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+      border: 2px solid var(--green);
+      border-radius: 16px;
+      padding: 16px;
       text-align: center;
-      padding: 20px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.15);
+      display: none;
     }
 
-    /* NOTIFICATION */
+    .arrivee-icon { font-size: 36px; margin-bottom: 8px; }
+    .arrivee-title { font-size: 16px; font-weight: 700; color: #065F46; }
+    .arrivee-sub { font-size: 13px; color: #047857; margin-top: 4px; }
+
+    /* NOTIF */
     .notif {
       position: fixed;
       top: 20px;
       left: 50%;
       transform: translateX(-50%) translateY(-100px);
-      background: linear-gradient(135deg, var(--violet), var(--violet-dark));
+      background: var(--violet);
       color: white;
       padding: 12px 24px;
       border-radius: 25px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       z-index: 9999;
       transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 10px 30px var(--violet-glow);
+      box-shadow: 0 8px 25px rgba(107,33,168,0.4);
       white-space: nowrap;
     }
-
     .notif.show { transform: translateX(-50%) translateY(0); }
 
-    /* LEAFLET CUSTOM */
-    .leaflet-container {
-      background: #0D0018 !important;
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 11px;
+      color: var(--text-light);
     }
+
+    /* LEAFLET */
+    .leaflet-container { font-family: 'Poppins', sans-serif !important; }
   </style>
 </head>
 <body>
 
-  <!-- PARTICULES -->
-  <div class="particle" style="width:4px;height:4px;left:10%;animation-duration:8s;animation-delay:0s;"></div>
-  <div class="particle" style="width:6px;height:6px;left:25%;animation-duration:12s;animation-delay:2s;"></div>
-  <div class="particle" style="width:3px;height:3px;left:50%;animation-duration:9s;animation-delay:4s;"></div>
-  <div class="particle" style="width:5px;height:5px;left:75%;animation-duration:11s;animation-delay:1s;"></div>
-  <div class="particle" style="width:4px;height:4px;left:90%;animation-duration:10s;animation-delay:3s;"></div>
+  <div class="notif" id="notif">✅ Position mise à jour</div>
 
-  <!-- NOTIFICATION -->
-  <div class="notif" id="notif">📍 Position mise à jour</div>
+  <!-- BANNER ARRIVÉE (caché au début) -->
+  <div class="arrivee-banner" id="arriveeBanner">
+    <div class="arrivee-icon">🎉</div>
+    <div class="arrivee-title">Votre chauffeur est arrivé !</div>
+    <div class="arrivee-sub">Jean vous attend à votre position</div>
+  </div>
 
   <div class="content">
 
     <!-- HEADER -->
     <div class="header">
-      <div class="header-left">
-        <div class="dna-logo">🧬</div>
+      <div class="header-logo">
+        <img src="https://raw.githubusercontent.com/dinabeni/dna-tracker/ed12391a53eda66f2d33609bbb8fccedf213cf4e/WhatsApp%20Image%202026-04-11%20at%2001.06.45.jpeg"
+             class="logo-img" alt="DNA Transport">
         <div>
-          <div class="logo-text">DNA Transport</div>
-          <div class="logo-sub">Pointe-Noire, Congo 🇨🇬</div>
+          <div class="logo-texte">DNA Transport</div>
+          <div class="logo-sub">Pointe-Noire 🇨🇬</div>
         </div>
       </div>
       <div class="live-badge">
@@ -473,54 +448,58 @@
 
     <!-- HERO ETA -->
     <div class="hero">
-      <div class="eta-hero" id="etaHero">8 <span class="eta-unit">min</span></div>
-      <div class="eta-label">⏱️ Votre chauffeur arrive dans</div>
+      <div class="hero-label">⏱️ Votre chauffeur arrive dans</div>
+      <div class="eta-cercle">
+        <div class="eta-number" id="etaNum">8</div>
+        <div class="eta-unit">minutes</div>
+      </div>
+      <div class="hero-desc" id="heroDesc">🚕 Jean est en route vers vous</div>
     </div>
 
     <!-- CARTE -->
     <div class="map-container">
       <div id="map"></div>
-      <div class="map-overlay"></div>
     </div>
 
     <!-- CARD CHAUFFEUR -->
     <div class="card-chauffeur">
-      <div class="avatar-container">
+      <div class="avatar-wrap">
         <div class="avatar">👨🏾</div>
-        <div class="avatar-online"></div>
+        <div class="online-dot"></div>
       </div>
-      <div class="chauffeur-info">
+      <div style="flex:1">
         <div class="chauffeur-nom" id="nomChauffeur">Jean Mbemba</div>
-        <div class="chauffeur-vehicule" id="vehicule">🚗 Toyota Corolla Noir · PNE-1234</div>
-        <div class="stars-container">
-          <div class="stars">⭐⭐⭐⭐⭐</div>
-          <div class="note" id="note">4.8</div>
+        <div class="chauffeur-car" id="vehicule">🚗 Toyota Corolla Noir · PNE-1234</div>
+        <div style="display:flex;align-items:center;">
+          <span class="stars">⭐⭐⭐⭐⭐</span>
+          <span class="note-val" id="note">4.8</span>
         </div>
       </div>
-      <button class="btn-call" onclick="appellerChauffeur()">📞</button>
+      <button class="btn-appel" onclick="appellerChauffeur()">📞</button>
     </div>
 
     <!-- STATS -->
-    <div class="stats-row">
-      <div class="stat-card">
+    <div class="stats-grid">
+      <div class="stat-box">
         <div class="stat-icon">📏</div>
-        <div class="stat-value" id="statKm">3.5</div>
-        <div class="stat-label">Kilomètres</div>
+        <div class="stat-val" id="statKm">3.5</div>
+        <div class="stat-lbl">km restants</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-icon">⚡</div>
-        <div class="stat-value" id="statVitesse">35</div>
-        <div class="stat-label">km/h</div>
+      <div class="stat-box">
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-val" id="statMin">8</div>
+        <div class="stat-lbl">minutes</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-box">
         <div class="stat-icon">💰</div>
-        <div class="stat-value" id="statPrix">1 000</div>
-        <div class="stat-label">FCFA</div>
+        <div class="stat-val" id="statPrix">1000</div>
+        <div class="stat-lbl">FCFA</div>
       </div>
     </div>
 
     <!-- INFO COURSE -->
-    <div class="course-banner">
+    <div class="course-card">
+      <div class="course-title">🗂️ Détails de votre course</div>
       <div class="course-row">
         <span class="course-key">📍 Départ</span>
         <span class="course-val" id="courseDepart">Tié-Tié</span>
@@ -533,288 +512,271 @@
         <span class="course-key">🔖 N° Course</span>
         <span class="course-val" id="courseId">CR-2025-0001</span>
       </div>
+      <div class="course-row">
+        <span class="course-key">📅 Date</span>
+        <span class="course-val" id="courseDate">--</span>
+      </div>
     </div>
 
     <!-- TIMELINE -->
     <div class="timeline-card">
-      <div class="timeline-title">📋 Statut de votre course</div>
+      <div class="tl-title">📋 Suivi de votre course</div>
 
-      <div class="timeline-item">
+      <div class="tl-item">
         <div class="tl-dot tl-done">✓</div>
-        <div class="tl-content">
-          <div class="tl-title">Paiement confirmé</div>
+        <div style="flex:1">
+          <div class="tl-text">Paiement confirmé</div>
           <div class="tl-sub">Course payée via Mobile Money</div>
         </div>
-        <div class="tl-time">✓</div>
+        <div class="tl-eta">✓</div>
       </div>
 
-      <div class="timeline-item">
+      <div class="tl-item">
         <div class="tl-dot tl-done">✓</div>
-        <div class="tl-content">
-          <div class="tl-title">Chauffeur assigné</div>
-          <div class="tl-sub" id="chauffeurAssigne">Jean est en route vers vous</div>
+        <div style="flex:1">
+          <div class="tl-text">Chauffeur assigné</div>
+          <div class="tl-sub" id="tlChauffeur">Jean est en route</div>
         </div>
-        <div class="tl-time">✓</div>
+        <div class="tl-eta">✓</div>
       </div>
 
-      <div class="timeline-item">
-        <div class="tl-dot tl-current">→</div>
-        <div class="tl-content">
-          <div class="tl-title">En route 🚕</div>
-          <div class="tl-sub">Position mise à jour en temps réel</div>
+      <div class="tl-item" id="tlEnRouteItem">
+        <div class="tl-dot tl-active">→</div>
+        <div style="flex:1">
+          <div class="tl-text">En route 🚕</div>
+          <div class="tl-sub">Suivi GPS actif en temps réel</div>
         </div>
-        <div class="tl-time" id="etaTimeline">~8 min</div>
+        <div class="tl-eta" id="tlEta">~8 min</div>
       </div>
 
-      <div class="timeline-item">
+      <div class="tl-item">
+        <div class="tl-dot tl-pending" id="tlArriveeDot"></div>
+        <div style="flex:1">
+          <div class="tl-text pending" id="tlArriveeText">Chauffeur arrivé</div>
+          <div class="tl-sub">Il vous attend à votre position</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
         <div class="tl-dot tl-pending"></div>
-        <div class="tl-content">
-          <div class="tl-title pending">Prise en charge</div>
-          <div class="tl-sub">Le chauffeur arrive à votre position</div>
+        <div style="flex:1">
+          <div class="tl-text pending">Course terminée</div>
+          <div class="tl-sub">Vous pourrez noter votre chauffeur</div>
         </div>
       </div>
 
-      <div class="timeline-item">
-        <div class="tl-dot tl-pending"></div>
-        <div class="tl-content">
-          <div class="tl-title pending">Course terminée</div>
-          <div class="tl-sub">Vous pourrez noter Jean</div>
-        </div>
-      </div>
     </div>
 
-    <!-- BOUTONS -->
-    <button class="btn-main btn-call-main" onclick="appellerChauffeur()">
-      📞 Appeler Jean
+    <!-- BOUTON APPELER -->
+    <button class="btn-primary" onclick="appellerChauffeur()">
+      📞 Appeler votre chauffeur
     </button>
 
-    <button class="btn-main btn-problem">
+    <button class="btn-secondary">
       ⚠️ Signaler un problème
     </button>
 
-    <!-- WATERMARK -->
-    <div class="dna-watermark">
-      🧬 DNA Transport — Pointe-Noire, République du Congo<br>
+    <!-- FOOTER -->
+    <div class="footer">
+      <img src="https://raw.githubusercontent.com/dinabeni/dna-tracker/ed12391a53eda66f2d33609bbb8fccedf213cf4e/WhatsApp%20Image%202026-04-11%20at%2001.06.45.jpeg"
+           style="width:30px;height:30px;border-radius:8px;margin-bottom:5px;display:block;margin:0 auto 5px;">
+      DNA Transport — Pointe-Noire, République du Congo 🇨🇬<br>
       Le transport est dans notre ADN
     </div>
 
   </div>
 
-  <!-- LEAFLET -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
   <script>
     // ═══════════════════════════════════════
-    // CONFIGURATION
+    // CONFIG
     // ═══════════════════════════════════════
     const N8N_URL = 'https://TON_N8N_URL/webhook/get-position';
-    const urlParams = new URLSearchParams(window.location.search);
-    const COURSE_ID = urlParams.get('course') || 'CR-2025-0001';
-    const CHAUFFEUR_TEL = urlParams.get('tel') || '';
-    const CHAUFFEUR_NOM = urlParams.get('nom') || 'Jean';
-    const DEPART = urlParams.get('depart') || 'Tié-Tié';
-    const ARRIVEE = urlParams.get('arrivee') || 'Centre-ville';
-    const PRIX = urlParams.get('prix') || '1 000';
+    const WHATSAPP_DNA = '242XXXXXXXXX'; // Numéro DNA pour les alertes
+    const params = new URLSearchParams(window.location.search);
+    const COURSE_ID = params.get('course') || 'CR-2025-0001';
+    const CHAUFFEUR_TEL = params.get('tel') || '';
+    const CHAUFFEUR_NOM = params.get('nom') || 'Jean';
+    const CLIENT_TEL = params.get('client') || '';
+    const DEPART = params.get('depart') || 'Tié-Tié';
+    const ARRIVEE = params.get('arrivee') || 'Centre-ville';
+    const PRIX = params.get('prix') || '1000';
 
-    // Remplir les infos de la course depuis l'URL
+    // Remplir les infos
+    document.getElementById('nomChauffeur').textContent = CHAUFFEUR_NOM + ' Mbemba';
     document.getElementById('courseId').textContent = COURSE_ID;
     document.getElementById('courseDepart').textContent = DEPART;
     document.getElementById('courseArrivee').textContent = ARRIVEE;
     document.getElementById('statPrix').textContent = PRIX;
-    document.getElementById('nomChauffeur').textContent = CHAUFFEUR_NOM + ' Mbemba';
-    document.getElementById('chauffeurAssigne').textContent = CHAUFFEUR_NOM + ' est en route vers vous';
-
-    // Mettre à jour le bouton appel
-    document.querySelector('.btn-call-main').innerHTML = '📞 Appeler ' + CHAUFFEUR_NOM;
+    document.getElementById('tlChauffeur').textContent = CHAUFFEUR_NOM + ' est en route';
+    document.getElementById('heroDesc').textContent = '🚕 ' + CHAUFFEUR_NOM + ' est en route vers vous';
+    document.getElementById('courseDate').textContent = new Date().toLocaleDateString('fr-FR');
 
     // ═══════════════════════════════════════
-    // CARTE LEAFLET
+    // CARTE
     // ═══════════════════════════════════════
     const posClient = [-4.7692, 11.8635];
     let posChauffeur = [-4.7850, 11.8450];
+    let chauffeurEstArrive = false;
 
-    const map = L.map('map', { zoomControl: false }).setView(posChauffeur, 14);
+    const map = L.map('map', { zoomControl: false, attributionControl: false })
+      .setView(posChauffeur, 14);
 
-    // Fond de carte sombre et élégant
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '',
-      maxZoom: 19
-    }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-    // Icône taxi DNA personnalisée
     const iconeTaxi = L.divIcon({
-      html: `
-        <div style="
-          background: linear-gradient(135deg, #7B2FBE, #4A0080);
-          width: 44px;
-          height: 44px;
-          border-radius: 14px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 22px;
-          box-shadow: 0 0 20px rgba(123,47,190,0.6), 0 4px 15px rgba(0,0,0,0.5);
-          border: 2px solid rgba(155,89,208,0.6);
-        ">🚕</div>
-      `,
-      className: '',
-      iconSize: [44, 44],
-      iconAnchor: [22, 22]
+      html: `<div style="background:linear-gradient(135deg,#6B21A8,#9333EA);width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 15px rgba(107,33,168,0.5);border:2px solid rgba(255,255,255,0.5);">🚕</div>`,
+      className: '', iconSize: [42, 42], iconAnchor: [21, 21]
     });
 
-    // Icône client
     const iconeClient = L.divIcon({
-      html: `
-        <div style="position:relative;">
-          <div style="
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #00E676;
-            box-shadow: 0 0 20px rgba(0,230,118,0.8);
-            border: 3px solid white;
-          "></div>
-          <div style="
-            position: absolute;
-            bottom: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,230,118,0.9);
-            color: #000;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 10px;
-            white-space: nowrap;
-            font-family: Poppins, sans-serif;
-          ">Vous êtes ici</div>
-        </div>
-      `,
-      className: '',
-      iconSize: [20, 20],
-      iconAnchor: [10, 10]
+      html: `<div style="position:relative;"><div style="width:18px;height:18px;border-radius:50%;background:#10B981;border:3px solid white;box-shadow:0 0 15px rgba(16,185,129,0.6);"></div></div>`,
+      className: '', iconSize: [18, 18], iconAnchor: [9, 9]
     });
 
-    // Marqueurs
     let markerTaxi = L.marker(posChauffeur, { icon: iconeTaxi }).addTo(map);
-    let markerClient = L.marker(posClient, { icon: iconeClient }).addTo(map);
-
-    // Ligne de trajet pointillée violette
+    L.marker(posClient, { icon: iconeClient }).addTo(map);
     let ligne = L.polyline([posChauffeur, posClient], {
-      color: '#7B2FBE',
-      weight: 3,
-      dashArray: '10, 10',
-      opacity: 0.8
+      color: '#9333EA', weight: 3, dashArray: '8,8', opacity: 0.7
     }).addTo(map);
 
-    // Zone d'arrivée (cercle pulsant)
-    let cercleArrivee = L.circle(posClient, {
-      radius: 80,
-      color: '#00E676',
-      fillColor: '#00E676',
-      fillOpacity: 0.1,
-      weight: 2,
-      opacity: 0.5
+    L.circle(posClient, {
+      radius: 60, color: '#10B981',
+      fillColor: '#10B981', fillOpacity: 0.1, weight: 2
     }).addTo(map);
 
-    // Ajuster la vue
-    map.fitBounds([posChauffeur, posClient], { padding: [40, 40] });
+    map.fitBounds([posChauffeur, posClient], { padding: [30, 30] });
 
     // ═══════════════════════════════════════
-    // MISE À JOUR EN TEMPS RÉEL
+    // VÉRIFIER ARRIVÉE DU CHAUFFEUR
     // ═══════════════════════════════════════
+    function verifierArrivee(lat, lng) {
+      const distanceMetres = calculerDistance(lat, lng, posClient[0], posClient[1]);
+      if (distanceMetres < 100 && !chauffeurEstArrive) {
+        chauffeurEstArrive = true;
+        chauffeurArrive();
+      }
+    }
 
+    function calculerDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371000;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    }
+
+    function chauffeurArrive() {
+      // Afficher le banner d'arrivée
+      document.getElementById('arriveeBanner').style.display = 'block';
+      document.getElementById('arriveeBanner').scrollIntoView({ behavior: 'smooth' });
+
+      // Mettre à jour l'ETA
+      document.getElementById('etaNum').textContent = '0';
+      document.getElementById('heroDesc').textContent = '🎉 ' + CHAUFFEUR_NOM + ' est arrivé !';
+
+      // Mettre à jour la timeline
+      document.getElementById('tlArriveeDot').className = 'tl-dot tl-done';
+      document.getElementById('tlArriveeDot').textContent = '✓';
+      document.getElementById('tlArriveeText').className = 'tl-text';
+
+      // Notification
+      afficherNotif('🎉 Votre chauffeur est arrivé !');
+
+      // Envoyer message WhatsApp au client via n8n
+      envoyerMessageArrivee();
+    }
+
+    async function envoyerMessageArrivee() {
+      try {
+        await fetch('https://TON_N8N_URL/webhook/chauffeur-arrive', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            client_tel: CLIENT_TEL,
+            chauffeur_nom: CHAUFFEUR_NOM,
+            course_id: COURSE_ID,
+            message: `🚕 *DNA Transport*\n\nBonne nouvelle ! Votre chauffeur *${CHAUFFEUR_NOM}* vient d'arriver à votre position !\n\nVotre taxi DNA vous attend. 🎉\n\n_DNA Transport — Pointe-Noire_ 🇨🇬`
+          })
+        });
+      } catch(e) {
+        console.log('Message d\'arrivée envoyé...');
+      }
+    }
+
+    // ═══════════════════════════════════════
+    // MISE À JOUR POSITION
+    // ═══════════════════════════════════════
     async function mettreAJour() {
       try {
         const res = await fetch(N8N_URL + '?course=' + COURSE_ID);
         const data = await res.json();
-
         if (data.latitude && data.longitude) {
           const newPos = [parseFloat(data.latitude), parseFloat(data.longitude)];
-
-          // Animation fluide du taxi
-          animerMarqueur(markerTaxi, posChauffeur, newPos);
+          animer(markerTaxi, posChauffeur, newPos);
           posChauffeur = newPos;
-
-          // Mise à jour de la ligne
           ligne.setLatLngs([newPos, posClient]);
-
-          // Mettre à jour l'ETA
           if (data.eta) {
-            document.getElementById('etaHero').innerHTML =
-              data.eta + ' <span class="eta-unit">min</span>';
-            document.getElementById('etaTimeline').textContent = '~' + data.eta + ' min';
+            document.getElementById('etaNum').textContent = data.eta;
+            document.getElementById('statMin').textContent = data.eta;
+            document.getElementById('tlEta').textContent = '~' + data.eta + ' min';
           }
-
-          // Notification discrète
+          if (data.distance_km) {
+            document.getElementById('statKm').textContent = data.distance_km;
+          }
+          verifierArrivee(newPos[0], newPos[1]);
           afficherNotif('📍 Position mise à jour');
         }
-      } catch(e) {
-        console.log('Connexion...');
-      }
+      } catch(e) {}
     }
 
-    // Animation fluide du marqueur
-    function animerMarqueur(marker, depart, arrivee) {
+    function animer(marker, from, to) {
       const steps = 20;
-      const deltaLat = (arrivee[0] - depart[0]) / steps;
-      const deltaLng = (arrivee[1] - depart[1]) / steps;
-      let step = 0;
-
-      const interval = setInterval(() => {
-        if (step >= steps) {
-          clearInterval(interval);
-          return;
-        }
-        const lat = depart[0] + deltaLat * step;
-        const lng = depart[1] + deltaLng * step;
-        marker.setLatLng([lat, lng]);
-        step++;
+      const dLat = (to[0] - from[0]) / steps;
+      const dLng = (to[1] - from[1]) / steps;
+      let s = 0;
+      const iv = setInterval(() => {
+        if (s >= steps) { clearInterval(iv); return; }
+        marker.setLatLng([from[0] + dLat * s, from[1] + dLng * s]);
+        s++;
       }, 50);
     }
 
-    // Notification
+    // ═══════════════════════════════════════
+    // SIMULATION (DÉMO)
+    // ═══════════════════════════════════════
+    let dLat = -4.7850, dLng = 11.8450, dEta = 8;
+    setInterval(() => {
+      dLat += 0.0006; dLng += 0.0008; dEta = Math.max(0, dEta - 0.5);
+      animer(markerTaxi, posChauffeur, [dLat, dLng]);
+      posChauffeur = [dLat, dLng];
+      ligne.setLatLngs([[dLat, dLng], posClient]);
+      const e = Math.ceil(dEta);
+      document.getElementById('etaNum').textContent = e;
+      document.getElementById('statMin').textContent = e;
+      document.getElementById('tlEta').textContent = '~' + e + ' min';
+      verifierArrivee(dLat, dLng);
+    }, 3000);
+
+    mettreAJour();
+    setInterval(mettreAJour, 10000);
+
+    // ═══════════════════════════════════════
+    // UTILITAIRES
+    // ═══════════════════════════════════════
+    function appellerChauffeur() {
+      if (CHAUFFEUR_TEL) window.location.href = 'tel:' + CHAUFFEUR_TEL;
+      else afficherNotif('📞 Standard DNA : 06 XXX XX XX');
+    }
+
     function afficherNotif(msg) {
       const n = document.getElementById('notif');
       n.textContent = msg;
       n.classList.add('show');
-      setTimeout(() => n.classList.remove('show'), 2500);
+      setTimeout(() => n.classList.remove('show'), 3000);
     }
-
-    // Appel du chauffeur
-    function appellerChauffeur() {
-      if (CHAUFFEUR_TEL) {
-        window.location.href = 'tel:' + CHAUFFEUR_TEL;
-      } else {
-        afficherNotif('📞 Standard DNA : 06 XXX XX XX');
-      }
-    }
-
-    // Démarrer la mise à jour toutes les 10 secondes
-    mettreAJour();
-    setInterval(mettreAJour, 10000);
-
-    // Simulation de mouvement pour la démo
-    // (À supprimer quand n8n est connecté)
-    let demoLat = -4.7850;
-    let demoLng = 11.8450;
-    let demoEta = 8;
-
-    setInterval(() => {
-      demoLat += 0.0003;
-      demoLng += 0.0004;
-      demoEta = Math.max(0, demoEta - 0.2);
-
-      animerMarqueur(markerTaxi, posChauffeur, [demoLat, demoLng]);
-      posChauffeur = [demoLat, demoLng];
-      ligne.setLatLngs([[demoLat, demoLng], posClient]);
-
-      const etaAffiche = Math.ceil(demoEta);
-      document.getElementById('etaHero').innerHTML =
-        etaAffiche + ' <span class="eta-unit">min</span>';
-      document.getElementById('etaTimeline').textContent = '~' + etaAffiche + ' min';
-    }, 3000);
-
   </script>
 </body>
 </html>
