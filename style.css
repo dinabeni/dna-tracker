@@ -1,0 +1,17 @@
+/* DNA Transport — Styles globaux partagés */
+
+:root {
+  --logo-url: url('TON_NOUVEAU_LOGO_URL');
+  --violet: #6B21A8;
+  --violet-light: #9333EA;
+  --violet-pale: #F3E8FF;
+}
+
+/* Logo dans la sidebar */
+.sidebar-logo img {
+  content: var(--logo-url);
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  object-fit: cover;
+}
