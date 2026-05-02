@@ -3,1140 +3,210 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DNA Transport — Dashboard Direction</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <title>DNA — Vue d'ensemble</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
     :root {
-      --violet: #6B21A8;
-      --violet-light: #9333EA;
-      --violet-pale: #F3E8FF;
-      --bg: #F8F9FC;
-      --card: #FFFFFF;
-      --text: #1E1B4B;
-      --text-light: #6B7280;
-      --green: #10B981;
-      --red: #EF4444;
-      --gold: #F59E0B;
-      --blue: #3B82F6;
+      --violet: #6B21A8; --violet-light: #9333EA;
+      --violet-pale: #F3E8FF; --bg: #F8F9FC;
+      --card: #FFFFFF; --text: #1E1B4B;
+      --text-light: #6B7280; --green: #10B981;
+      --red: #EF4444; --gold: #F59E0B; --blue: #3B82F6;
       --shadow: 0 2px 12px rgba(0,0,0,0.06);
-      --shadow-lg: 0 8px 30px rgba(107,33,168,0.12);
     }
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+    body { font-family:'Poppins',sans-serif; background:var(--bg); color:var(--text); }
 
     /* SIDEBAR */
     .sidebar {
-      position: fixed;
-      left: 0; top: 0;
-      width: 240px;
-      height: 100vh;
-      background: linear-gradient(180deg, var(--violet) 0%, #4A0080 100%);
-      padding: 20px;
-      z-index: 100;
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
+      position:fixed; left:0; top:0; width:240px; height:100vh;
+      background:linear-gradient(180deg,var(--violet) 0%,#4A0080 100%);
+      padding:20px; z-index:100; display:flex; flex-direction:column;
+      overflow-y:auto;
     }
-    .sidebar-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 35px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.15);
-    }
-    .sidebar-logo img {
-      width: 40px; height: 40px;
-      border-radius: 10px;
-      object-fit: cover;
-    }
-    .sidebar-logo-text { font-size: 15px; font-weight: 700; color: white; }
-    .sidebar-logo-sub { font-size: 10px; color: rgba(255,255,255,0.6); }
-    .sidebar-menu { flex: 1; }
-    .menu-section {
-      font-size: 10px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.4);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin: 20px 0 8px;
-    }
-    .menu-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      cursor: pointer;
-      color: rgba(255,255,255,0.7);
-      font-size: 13px;
-      font-weight: 500;
-      transition: all 0.2s;
-      margin-bottom: 4px;
-      text-decoration: none;
-    }
-    .menu-item:hover { background: rgba(255,255,255,0.1); color: white; }
-    .menu-item.active { background: rgba(255,255,255,0.2); color: white; font-weight: 600; }
-    .menu-icon { font-size: 18px; width: 24px; }
-    .menu-badge {
-      margin-left: auto;
-      background: var(--red);
-      color: white;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 20px;
-    }
-    .sidebar-bottom {
-      padding-top: 20px;
-      border-top: 1px solid rgba(255,255,255,0.15);
-    }
-    .sidebar-user {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: rgba(255,255,255,0.8);
-    }
-    .user-avatar {
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
-    .user-name { font-size: 13px; font-weight: 600; color: white; }
-    .user-role { font-size: 10px; color: rgba(255,255,255,0.5); }
+    .sidebar-logo { display:flex; align-items:center; gap:10px; margin-bottom:30px; padding-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.15); }
+    .sidebar-logo img { width:38px; height:38px; border-radius:10px; object-fit:cover; }
+    .sidebar-logo-text { font-size:14px; font-weight:700; color:white; }
+    .sidebar-logo-sub { font-size:10px; color:rgba(255,255,255,0.6); }
+    .menu-section { font-size:10px; font-weight:600; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:1px; margin:18px 0 8px; }
+    .menu-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:10px; color:rgba(255,255,255,0.7); font-size:13px; font-weight:500; text-decoration:none; margin-bottom:3px; transition:all 0.2s; }
+    .menu-item:hover { background:rgba(255,255,255,0.1); color:white; }
+    .menu-item.active { background:rgba(255,255,255,0.2); color:white; font-weight:600; }
+    .menu-icon { font-size:16px; width:22px; }
+    .menu-badge { margin-left:auto; background:var(--red); color:white; font-size:10px; font-weight:700; padding:2px 7px; border-radius:20px; }
+    .sidebar-bottom { margin-top:auto; padding-top:20px; border-top:1px solid rgba(255,255,255,0.15); }
+    .sidebar-user { display:flex; align-items:center; gap:10px; }
+    .user-avatar { width:34px; height:34px; border-radius:10px; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:16px; }
+    .user-name { font-size:12px; font-weight:600; color:white; }
+    .user-role { font-size:10px; color:rgba(255,255,255,0.5); }
 
     /* MAIN */
-    .main { margin-left: 240px; min-height: 100vh; }
+    .main { margin-left:240px; }
+    .topbar { background:white; padding:16px 24px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #F0F0F0; position:sticky; top:0; z-index:50; }
+    .topbar-title { font-size:18px; font-weight:700; }
+    .topbar-sub { font-size:12px; color:var(--text-light); }
+    .topbar-right { display:flex; align-items:center; gap:12px; }
+    .topbar-btn { padding:8px 16px; border-radius:10px; border:none; font-family:'Poppins',sans-serif; font-size:13px; font-weight:600; cursor:pointer; }
+    .btn-refresh { background:var(--violet-pale); color:var(--violet); }
+    .live-ind { display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--green); }
+    .live-dot { width:8px; height:8px; border-radius:50%; background:var(--green); animation:blink 1.5s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .content { padding:24px; }
 
-    /* TOP BAR */
-    .topbar {
-      background: white;
-      padding: 16px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #F0F0F0;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-    .topbar-title { font-size: 18px; font-weight: 700; color: var(--text); }
-    .topbar-sub { font-size: 12px; color: var(--text-light); margin-top: 1px; }
-    .topbar-right { display: flex; align-items: center; gap: 12px; }
-    .topbar-btn {
-      padding: 8px 16px;
-      border-radius: 10px;
-      border: none;
-      font-family: 'Poppins', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn-refresh { background: var(--violet-pale); color: var(--violet); }
-    .btn-export { background: var(--violet); color: white; }
-    .live-indicator {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--green);
-    }
-    .live-dot-green {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--green);
-      animation: blink 1.5s infinite;
-    }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
+    /* KPI */
+    .kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+    .kpi-card { background:var(--card); border-radius:16px; padding:20px; box-shadow:var(--shadow); border:1px solid #F0F0F0; transition:transform 0.3s; }
+    .kpi-card:hover { transform:translateY(-4px); }
+    .kpi-icon { font-size:28px; margin-bottom:10px; }
+    .kpi-val { font-size:32px; font-weight:800; }
+    .kpi-lbl { font-size:12px; color:var(--text-light); margin-top:4px; }
+    .kpi-trend { font-size:11px; font-weight:600; margin-top:8px; color:var(--green); }
 
-    /* CONTENT */
-    .content { padding: 24px; }
+    /* REVENUS RAPIDE */
+    .rev-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:24px; }
+    .rev-item { background:var(--card); border-radius:16px; padding:20px; text-align:center; box-shadow:var(--shadow); border:1px solid #F0F0F0; transition:transform 0.3s; }
+    .rev-item:hover { transform:translateY(-3px); }
+    .rev-icon { font-size:24px; margin-bottom:8px; }
+    .rev-val { font-size:22px; font-weight:800; color:var(--violet); }
+    .rev-lbl { font-size:11px; color:var(--text-light); margin-top:4px; }
 
-    /* KPI CARDS */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .kpi-card {
-      background: var(--card);
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: var(--shadow);
-      border: 1px solid #F0F0F0;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .kpi-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
-    }
-    .kpi-card::before {
-      content: '';
-      position: absolute;
-      top: 0; right: 0;
-      width: 80px; height: 80px;
-      border-radius: 0 0 0 80px;
-      opacity: 0.06;
-    }
-    .kpi-violet::before { background: var(--violet); }
-    .kpi-green::before { background: var(--green); }
-    .kpi-gold::before { background: var(--gold); }
-    .kpi-blue::before { background: var(--blue); }
-    .kpi-icon { font-size: 28px; margin-bottom: 12px; }
-    .kpi-val { font-size: 32px; font-weight: 800; color: var(--text); }
-    .kpi-lbl { font-size: 12px; color: var(--text-light); margin-top: 4px; }
-    .kpi-trend {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      margin-top: 8px;
-    }
-    .trend-up { color: var(--green); }
-    .trend-down { color: var(--red); }
+    /* ACTIVITE RECENTE */
+    .section-card { background:var(--card); border-radius:16px; box-shadow:var(--shadow); border:1px solid #F0F0F0; overflow:hidden; margin-bottom:20px; }
+    .card-header { padding:16px 20px; border-bottom:1px solid #F8F8F8; display:flex; justify-content:space-between; align-items:center; }
+    .card-title { font-size:14px; font-weight:700; }
+    .card-sub { font-size:11px; color:var(--text-light); }
+    .act-item { display:flex; align-items:center; gap:12px; padding:12px 20px; border-bottom:1px solid #F8F8F8; }
+    .act-item:last-child { border-bottom:none; }
+    .act-icon { font-size:20px; }
+    .act-text { font-size:13px; flex:1; }
+    .act-time { font-size:11px; color:var(--text-light); }
 
-    /* SECTION CARD COMMUNES */
-    .section-card {
-      background: var(--card);
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      border: 1px solid #F0F0F0;
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-    .card-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid #F8F8F8;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .card-title { font-size: 14px; font-weight: 700; color: var(--text); }
-    .card-sub { font-size: 11px; color: var(--text-light); margin-top: 2px; }
-    .card-body { padding: 20px; }
-
-    /* GRILLE PRINCIPALE */
-    .main-grid {
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 20px;
-      margin-bottom: 20px;
-    }
-
-    /* CARTE */
-    #mapDashboard { height: 380px; }
-
-    /* PANEL DROITE */
-    .panel-right { display: flex; flex-direction: column; gap: 16px; }
-
-    /* CHAUFFEURS */
-    .chauffeur-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 20px;
-      border-bottom: 1px solid #F8F8F8;
-      transition: background 0.2s;
-    }
-    .chauffeur-item:hover { background: #FAFAFA; }
-    .chauffeur-item:last-child { border-bottom: none; }
-    .ch-avatar-small {
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      background: var(--violet-pale);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-    .ch-info { flex: 1; }
-    .ch-nom-small { font-size: 13px; font-weight: 600; }
-    .ch-zone { font-size: 11px; color: var(--text-light); }
-    .ch-badge {
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 10px;
-      font-weight: 700;
-    }
-    .badge-dispo { background: #D1FAE5; color: #065F46; }
-    .badge-course { background: #DBEAFE; color: #1E40AF; }
-    .badge-hors { background: #F3F4F6; color: #6B7280; }
-
-    /* ALERTES */
-    .alerte-item {
-      display: flex;
-      gap: 12px;
-      padding: 12px 20px;
-      border-bottom: 1px solid #F8F8F8;
-      align-items: flex-start;
-      transition: background 0.2s;
-    }
-    .alerte-item:hover { background: #FAFAFA; }
-    .alerte-icon { font-size: 20px; flex-shrink: 0; }
-    .alerte-text { font-size: 12px; color: var(--text); line-height: 1.5; }
-    .alerte-time { font-size: 10px; color: var(--text-light); margin-top: 3px; }
-
-    /* REVENUS */
-    .revenus-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-    .revenu-item {
-      text-align: center;
-      padding: 16px;
-      border-radius: 12px;
-      transition: transform 0.3s;
-    }
-    .revenu-item:hover { transform: translateY(-3px); }
-    .revenu-violet { background: var(--violet-pale); }
-    .revenu-green { background: #D1FAE5; }
-    .revenu-gold { background: #FEF3C7; }
-    .revenu-icon { font-size: 24px; margin-bottom: 8px; }
-    .revenu-val { font-size: 20px; font-weight: 800; color: var(--text); }
-    .revenu-lbl { font-size: 11px; color: var(--text-light); margin-top: 3px; }
-
-    /* WIFI STATS */
-    .wifi-card {
-      background: linear-gradient(135deg, var(--violet), var(--violet-light));
-      border-radius: 16px;
-      padding: 20px;
-      color: white;
-      margin-bottom: 20px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-    .wifi-item { text-align: center; }
-    .wifi-val { font-size: 28px; font-weight: 800; }
-    .wifi-lbl { font-size: 11px; opacity: 0.8; margin-top: 3px; }
-
-    /* TABLES */
-    .table-wrapper { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; }
-    thead th {
-      padding: 12px 16px;
-      text-align: left;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-light);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      background: #FAFAFA;
-      border-bottom: 1px solid #F0F0F0;
-    }
-    tbody td {
-      padding: 14px 16px;
-      font-size: 13px;
-      border-bottom: 1px solid #F8F8F8;
-    }
-    tbody tr:hover { background: #FAFAFA; }
-    tbody tr:last-child td { border-bottom: none; }
-    .td-course-id { font-weight: 600; color: var(--violet); }
-    .td-statut-badge {
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-      display: inline-block;
-    }
-    .statut-en-cours { background: #DBEAFE; color: #1E40AF; }
-    .statut-terminee { background: #D1FAE5; color: #065F46; }
-    .statut-annulee { background: #FEE2E2; color: #991B1B; }
-    .statut-prospection { background: #FEF3C7; color: #92400E; }
-    .statut-interesse { background: #D1FAE5; color: #065F46; }
-    .statut-signe { background: #DBEAFE; color: #1E40AF; }
-
-    /* RENTABILITÉ */
-    .rent-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-    .rent-card {
-      background: #FAFAFA;
-      border-radius: 14px;
-      padding: 16px;
-      border: 1px solid #F0F0F0;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      transition: transform 0.2s;
-    }
-    .rent-card:hover { transform: translateY(-2px); }
-    .rent-avatar {
-      width: 44px; height: 44px;
-      border-radius: 12px;
-      background: var(--violet-pale);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      flex-shrink: 0;
-    }
-    .rent-nom { font-size: 13px; font-weight: 600; }
-    .rent-courses { font-size: 11px; color: var(--text-light); }
-    .rent-gain { font-size: 15px; font-weight: 700; color: var(--green); margin-left: auto; }
-
-    /* ANNULATION */
-    .annul-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-    .annul-item {
-      text-align: center;
-      padding: 20px;
-      border-radius: 14px;
-      border: 1px solid #F0F0F0;
-    }
-    .annul-val { font-size: 28px; font-weight: 800; }
-    .annul-lbl { font-size: 11px; color: var(--text-light); margin-top: 5px; }
-
-    /* VIP */
-    .vip-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 20px;
-      border-bottom: 1px solid #F8F8F8;
-    }
-    .vip-item:last-child { border-bottom: none; }
-    .vip-avatar {
-      width: 42px; height: 42px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--gold), #D97706);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      color: white;
-    }
-    .vip-nom { font-size: 13px; font-weight: 600; }
-    .vip-courses { font-size: 11px; color: var(--text-light); }
-    .vip-badge {
-      margin-left: auto;
-      background: #FEF3C7;
-      color: #92400E;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 10px;
-      font-weight: 700;
-    }
-
-    /* PARAMÈTRES */
-    .param-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-    .param-item {
-      background: #FAFAFA;
-      border-radius: 14px;
-      padding: 16px;
-      border: 1px solid #F0F0F0;
-    }
-    .param-label { font-size: 12px; color: var(--text-light); margin-bottom: 5px; }
-    .param-value { font-size: 15px; font-weight: 700; color: var(--text); }
-
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      .sidebar { display: none; }
-      .main { margin-left: 0; }
-      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-      .main-grid { grid-template-columns: 1fr; }
-      .wifi-card { grid-template-columns: repeat(2, 1fr); }
-      .rent-grid { grid-template-columns: 1fr; }
-      .annul-stats { grid-template-columns: 1fr; }
-      .param-grid { grid-template-columns: 1fr; }
+    @media(max-width:768px) {
+      .sidebar{display:none} .main{margin-left:0}
+      .kpi-grid{grid-template-columns:repeat(2,1fr)}
+      .rev-grid{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
 
-  <!-- SIDEBAR -->
+  <!-- SIDEBAR (Identique sur toutes les pages) -->
   <div class="sidebar">
     <div class="sidebar-logo">
       <img src="https://raw.githubusercontent.com/dinabeni/dna-tracker/ed12391a53eda66f2d33609bbb8fccedf213cf4e/WhatsApp%20Image%202026-04-11%20at%2001.06.45.jpeg" alt="DNA">
       <div>
         <div class="sidebar-logo-text">DNA Transport</div>
-        <div class="sidebar-logo-sub">Dashboard Direction</div>
+        <div class="sidebar-logo-sub">Dashboard</div>
       </div>
     </div>
-
-    <div class="sidebar-menu">
+    <div>
       <div class="menu-section">Principal</div>
-      <a class="menu-item active" href="#overviewSection">
-        <span class="menu-icon">📊</span> Vue d'ensemble
-      </a>
-      <a class="menu-item" href="#mapSection">
-        <span class="menu-icon">🗺️</span> Carte en direct
-      </a>
-      <a class="menu-item" href="#coursesSection">
-        <span class="menu-icon">🚕</span> Courses
-        <span class="menu-badge" id="badgeCourses">4</span>
-      </a>
-
+      <a class="menu-item active" href="dashboard.html"><span class="menu-icon">📊</span> Vue d'ensemble</a>
+      <a class="menu-item" href="dash-carte.html"><span class="menu-icon">🗺️</span> Carte en direct</a>
+      <a class="menu-item" href="dash-courses.html"><span class="menu-icon">🚕</span> Courses <span class="menu-badge">4</span></a>
       <div class="menu-section">Gestion</div>
-      <a class="menu-item" href="#driversSection">
-        <span class="menu-icon">👤</span> Chauffeurs
-      </a>
-      <a class="menu-item" href="#financeSection">
-        <span class="menu-icon">💰</span> Finances
-      </a>
-      <a class="menu-item" href="#wifiSection">
-        <span class="menu-icon">📶</span> WiFi & Revenus
-      </a>
-      <a class="menu-item" href="#b2bSection">
-        <span class="menu-icon">🏢</span> Entreprises B2B
-      </a>
-      <a class="menu-item" href="#rentSection">
-        <span class="menu-icon">📈</span> Rentabilité
-      </a>
-
+      <a class="menu-item" href="dash-chauffeurs.html"><span class="menu-icon">👤</span> Chauffeurs</a>
+      <a class="menu-item" href="dash-finances.html"><span class="menu-icon">💰</span> Finances</a>
+      <a class="menu-item" href="dash-wifi.html"><span class="menu-icon">📶</span> WiFi & Revenus</a>
+      <a class="menu-item" href="dash-b2b.html"><span class="menu-icon">🏢</span> Entreprises B2B</a>
+      <a class="menu-item" href="dash-rentabilite.html"><span class="menu-icon">📈</span> Rentabilité</a>
       <div class="menu-section">Clients</div>
-      <a class="menu-item" href="#vipSection">
-        <span class="menu-icon">👑</span> Clients VIP
-      </a>
-      <a class="menu-item" href="#annulSection">
-        <span class="menu-icon">📉</span> Annulations
-      </a>
-
+      <a class="menu-item" href="dash-vip.html"><span class="menu-icon">👑</span> Clients VIP</a>
+      <a class="menu-item" href="dash-annulations.html"><span class="menu-icon">📉</span> Annulations</a>
       <div class="menu-section">Outils</div>
-      <a class="menu-item" href="#alertsSection">
-        <span class="menu-icon">🔔</span> Alertes
-        <span class="menu-badge" id="badgeAlertes">4</span>
-      </a>
-      <a class="menu-item" href="#reportsSection">
-        <span class="menu-icon">📋</span> Rapports
-      </a>
-      <a class="menu-item" href="#settingsSection">
-        <span class="menu-icon">⚙️</span> Paramètres
-      </a>
+      <a class="menu-item" href="dash-alertes.html"><span class="menu-icon">🔔</span> Alertes <span class="menu-badge">4</span></a>
+      <a class="menu-item" href="dash-rapports.html"><span class="menu-icon">📋</span> Rapports</a>
+      <a class="menu-item" href="dash-parametres.html"><span class="menu-icon">⚙️</span> Paramètres</a>
     </div>
-
     <div class="sidebar-bottom">
       <div class="sidebar-user">
         <div class="user-avatar">👑</div>
-        <div>
-          <div class="user-name">Direction DNA</div>
-          <div class="user-role">Administrateur</div>
-        </div>
+        <div><div class="user-name">Direction DNA</div><div class="user-role">Administrateur</div></div>
       </div>
     </div>
   </div>
 
   <!-- MAIN -->
   <div class="main">
-
-    <!-- TOPBAR -->
     <div class="topbar">
       <div>
-        <div class="topbar-title">Vue d'ensemble — DNA Transport</div>
-        <div class="topbar-sub" id="topbarDate"></div>
+        <div class="topbar-title">📊 Vue d'ensemble</div>
+        <div class="topbar-sub" id="dateJour"></div>
       </div>
       <div class="topbar-right">
-        <div class="live-indicator">
-          <div class="live-dot-green"></div>
-          Données en direct
-        </div>
+        <div class="live-ind"><div class="live-dot"></div> En direct</div>
         <button class="topbar-btn btn-refresh" onclick="location.reload()">🔄 Actualiser</button>
-        <button class="topbar-btn btn-export">📥 Exporter</button>
       </div>
     </div>
 
-    <div class="content" id="overviewSection">
+    <div class="content">
 
-      <!-- KPI CARDS -->
+      <!-- KPI -->
       <div class="kpi-grid">
-        <div class="kpi-card kpi-violet">
+        <div class="kpi-card">
           <div class="kpi-icon">🚕</div>
           <div class="kpi-val">4</div>
           <div class="kpi-lbl">Courses aujourd'hui</div>
-          <div class="kpi-trend trend-up">↑ 2 en cours</div>
+          <div class="kpi-trend">↑ 2 en cours</div>
         </div>
-        <div class="kpi-card kpi-green">
+        <div class="kpi-card">
           <div class="kpi-icon">💰</div>
-          <div class="kpi-val">1 200</div>
-          <div class="kpi-lbl">FCFA commissions</div>
-          <div class="kpi-trend trend-up">↑ En direct</div>
+          <div class="kpi-val">178 600</div>
+          <div class="kpi-lbl">FCFA générés</div>
+          <div class="kpi-trend">↑ Abonnements + Commissions + WiFi</div>
         </div>
-        <div class="kpi-card kpi-gold">
+        <div class="kpi-card">
           <div class="kpi-icon">👤</div>
           <div class="kpi-val">3</div>
           <div class="kpi-lbl">Chauffeurs actifs</div>
-          <div class="kpi-trend trend-up">↑ 2 disponibles</div>
+          <div class="kpi-trend">↑ 2 disponibles</div>
         </div>
-        <div class="kpi-card kpi-blue">
+        <div class="kpi-card">
           <div class="kpi-icon">📶</div>
           <div class="kpi-val">12</div>
           <div class="kpi-lbl">Connexions WiFi</div>
-          <div class="kpi-trend trend-up">↑ 2 400 FCFA</div>
+          <div class="kpi-trend">↑ 2 400 FCFA</div>
         </div>
       </div>
 
-      <!-- FINANCES -->
-      <div class="section-card" id="financeSection">
+      <!-- REVENUS RAPIDES -->
+      <div class="rev-grid">
+        <div class="rev-item">
+          <div class="rev-icon">📋</div>
+          <div class="rev-val">175 000</div>
+          <div class="rev-lbl">Abonnements FCFA</div>
+        </div>
+        <div class="rev-item">
+          <div class="rev-icon">🚕</div>
+          <div class="rev-val">1 200</div>
+          <div class="rev-lbl">Commissions FCFA</div>
+        </div>
+        <div class="rev-item">
+          <div class="rev-icon">📶</div>
+          <div class="rev-val">2 400</div>
+          <div class="rev-lbl">WiFi FCFA</div>
+        </div>
+      </div>
+
+      <!-- ACTIVITÉ RÉCENTE -->
+      <div class="section-card">
         <div class="card-header">
-          <div>
-            <div class="card-title">💰 Revenus du jour</div>
-            <div class="card-sub">Toutes sources confondues</div>
-          </div>
+          <div><div class="card-title">🕐 Activité récente</div><div class="card-sub">Dernières actions en temps réel</div></div>
         </div>
-        <div class="card-body">
-          <div class="revenus-grid">
-            <div class="revenu-item revenu-violet">
-              <div class="revenu-icon">📋</div>
-              <div class="revenu-val">175 000</div>
-              <div class="revenu-lbl">Abonnements FCFA</div>
-            </div>
-            <div class="revenu-item revenu-green">
-              <div class="revenu-icon">🚕</div>
-              <div class="revenu-val">1 200</div>
-              <div class="revenu-lbl">Commissions FCFA</div>
-            </div>
-            <div class="revenu-item revenu-gold">
-              <div class="revenu-icon">📶</div>
-              <div class="revenu-val">2 400</div>
-              <div class="revenu-lbl">WiFi FCFA</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- WIFI STATS -->
-      <div class="wifi-card" id="wifiSection">
-        <div class="wifi-item">
-          <div class="wifi-val">12</div>
-          <div class="wifi-lbl">Connexions WiFi</div>
-        </div>
-        <div class="wifi-item">
-          <div class="wifi-val">2 400</div>
-          <div class="wifi-lbl">FCFA WiFi</div>
-        </div>
-        <div class="wifi-item">
-          <div class="wifi-val">60%</div>
-          <div class="wifi-lbl">Taux adoption</div>
-        </div>
-        <div class="wifi-item">
-          <div class="wifi-val">4</div>
-          <div class="wifi-lbl">Moy/taxi/jour</div>
-        </div>
-      </div>
-
-      <!-- CARTE + CHAUFFEURS -->
-      <div class="main-grid" id="mapSection">
-        <div class="section-card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">🗺️ Taxis DNA en temps réel</div>
-              <div class="card-sub">Positions GPS mises à jour toutes les 10s</div>
-            </div>
-            <div class="live-indicator">
-              <div class="live-dot-green"></div>
-              3 actifs
-            </div>
-          </div>
-          <div id="mapDashboard"></div>
-        </div>
-
-        <div class="panel-right">
-          <!-- CHAUFFEURS -->
-          <div class="section-card" id="driversSection">
-            <div class="card-header">
-              <div>
-                <div class="card-title">👥 Chauffeurs</div>
-                <div class="card-sub">Statuts en temps réel</div>
-              </div>
-            </div>
-            <div class="chauffeur-item">
-              <div class="ch-avatar-small">👨🏾</div>
-              <div class="ch-info">
-                <div class="ch-nom-small">Jean Mbemba</div>
-                <div class="ch-zone">📍 Tié-Tié</div>
-              </div>
-              <span class="ch-badge badge-dispo">🟢 Disponible</span>
-            </div>
-            <div class="chauffeur-item">
-              <div class="ch-avatar-small">👨🏾</div>
-              <div class="ch-info">
-                <div class="ch-nom-small">Pierre Lounda</div>
-                <div class="ch-zone">📍 Centre-ville</div>
-              </div>
-              <span class="ch-badge badge-course">🔵 En course</span>
-            </div>
-            <div class="chauffeur-item">
-              <div class="ch-avatar-small">👩🏾</div>
-              <div class="ch-info">
-                <div class="ch-nom-small">Marie Nkouka</div>
-                <div class="ch-zone">📍 Ngoyo</div>
-              </div>
-              <span class="ch-badge badge-dispo">🟢 Disponible</span>
-            </div>
-            <div class="chauffeur-item">
-              <div class="ch-avatar-small">👨🏾</div>
-              <div class="ch-info">
-                <div class="ch-nom-small">Alain Samba</div>
-                <div class="ch-zone">📍 Loandjili</div>
-              </div>
-              <span class="ch-badge badge-hors">⚫ Hors ligne</span>
-            </div>
-            <div class="chauffeur-item">
-              <div class="ch-avatar-small">👨🏾</div>
-              <div class="ch-info">
-                <div class="ch-nom-small">François Okoué</div>
-                <div class="ch-zone">📍 OCH</div>
-              </div>
-              <span class="ch-badge badge-course">🔵 En course</span>
-            </div>
-          </div>
-
-          <!-- ALERTES -->
-          <div class="section-card" id="alertsSection">
-            <div class="card-header">
-              <div>
-                <div class="card-title">🔔 Alertes</div>
-              </div>
-              <span style="font-size:11px;color:var(--text-light)">4 alertes</span>
-            </div>
-            <div class="alerte-item">
-              <div class="alerte-icon">⚠️</div>
-              <div>
-                <div class="alerte-text">Jean Mbemba : Course en attente depuis 8 min</div>
-                <div class="alerte-time">Il y a 2 min</div>
-              </div>
-            </div>
-            <div class="alerte-item">
-              <div class="alerte-icon">📶</div>
-              <div>
-                <div class="alerte-text">12 connexions WiFi générées aujourd'hui</div>
-                <div class="alerte-time">Il y a 15 min</div>
-              </div>
-            </div>
-            <div class="alerte-item">
-              <div class="alerte-icon">⭐</div>
-              <div>
-                <div class="alerte-text">Pierre Lounda a reçu une note 5/5</div>
-                <div class="alerte-time">Il y a 28 min</div>
-              </div>
-            </div>
-            <div class="alerte-item">
-              <div class="alerte-icon">🎉</div>
-              <div>
-                <div class="alerte-text">Objectif journalier atteint à 75%</div>
-                <div class="alerte-time">Il y a 1h</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TABLE COURSES -->
-      <div class="section-card" id="coursesSection">
-        <div class="card-header">
-          <div>
-            <div class="card-title">📋 Courses en cours & récentes</div>
-            <div class="card-sub">4 courses</div>
-          </div>
-        </div>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>N° Course</th>
-                <th>Chauffeur</th>
-                <th>Départ</th>
-                <th>Arrivée</th>
-                <th>Prix</th>
-                <th>Commission</th>
-                <th>Statut</th>
-                <th>Heure</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="td-course-id">CR-2025-0001</td>
-                <td>Jean Mbemba</td>
-                <td>📍 Tié-Tié</td>
-                <td>🏁 Centre-ville</td>
-                <td style="font-weight:600">1 000 F</td>
-                <td style="color:var(--violet);font-weight:600">160 F</td>
-                <td><span class="td-statut-badge statut-en-cours">🔵 En cours</span></td>
-                <td style="color:var(--text-light)">14:32</td>
-              </tr>
-              <tr>
-                <td class="td-course-id">CR-2025-0002</td>
-                <td>Pierre Lounda</td>
-                <td>📍 Ngoyo</td>
-                <td>🏁 Centre-ville</td>
-                <td style="font-weight:600">2 500 F</td>
-                <td style="color:var(--violet);font-weight:600">400 F</td>
-                <td><span class="td-statut-badge statut-en-cours">🔵 En cours</span></td>
-                <td style="color:var(--text-light)">14:28</td>
-              </tr>
-              <tr>
-                <td class="td-course-id">CR-2025-0003</td>
-                <td>Marie Nkouka</td>
-                <td>📍 OCH</td>
-                <td>🏁 Loandjili</td>
-                <td style="font-weight:600">1 500 F</td>
-                <td style="color:var(--violet);font-weight:600">240 F</td>
-                <td><span class="td-statut-badge statut-terminee">✅ Terminée</span></td>
-                <td style="color:var(--text-light)">14:15</td>
-              </tr>
-              <tr>
-                <td class="td-course-id">CR-2025-0004</td>
-                <td>François Okoué</td>
-                <td>📍 Centre-ville</td>
-                <td>🏁 Aéroport</td>
-                <td style="font-weight:600">2 500 F</td>
-                <td style="color:var(--violet);font-weight:600">400 F</td>
-                <td><span class="td-statut-badge statut-terminee">✅ Terminée</span></td>
-                <td style="color:var(--text-light)">13:45</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- RENTABILITÉ PAR CHAUFFEUR -->
-      <div class="section-card" id="rentSection">
-        <div class="card-header">
-          <div>
-            <div class="card-title">📈 Rentabilité par chauffeur</div>
-            <div class="card-sub">Performance du jour</div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="rent-grid">
-            <div class="rent-card">
-              <div class="rent-avatar">👨🏾</div>
-              <div>
-                <div class="rent-nom">Jean Mbemba</div>
-                <div class="rent-courses">3 courses • ⭐ 4.8</div>
-              </div>
-              <div class="rent-gain">+2 520 F</div>
-            </div>
-            <div class="rent-card">
-              <div class="rent-avatar">👨🏾</div>
-              <div>
-                <div class="rent-nom">Pierre Lounda</div>
-                <div class="rent-courses">5 courses • ⭐ 5.0</div>
-              </div>
-              <div class="rent-gain">+4 200 F</div>
-            </div>
-            <div class="rent-card">
-              <div class="rent-avatar">👩🏾</div>
-              <div>
-                <div class="rent-nom">Marie Nkouka</div>
-                <div class="rent-courses">2 courses • ⭐ 4.5</div>
-              </div>
-              <div class="rent-gain">+1 680 F</div>
-            </div>
-            <div class="rent-card">
-              <div class="rent-avatar">👨🏾</div>
-              <div>
-                <div class="rent-nom">François Okoué</div>
-                <div class="rent-courses">4 courses • ⭐ 4.7</div>
-              </div>
-              <div class="rent-gain">+3 360 F</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TAUX D'ANNULATION -->
-      <div class="section-card" id="annulSection">
-        <div class="card-header">
-          <div>
-            <div class="card-title">📉 Taux d'annulation</div>
-            <div class="card-sub">Suivi des annulations aujourd'hui</div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="annul-stats">
-            <div class="annul-item">
-              <div class="annul-val" style="color:var(--green)">92%</div>
-              <div class="annul-lbl">Taux de complétion</div>
-            </div>
-            <div class="annul-item">
-              <div class="annul-val" style="color:var(--gold)">1</div>
-              <div class="annul-lbl">Annulée par client</div>
-            </div>
-            <div class="annul-item">
-              <div class="annul-val" style="color:var(--red)">0</div>
-              <div class="annul-lbl">Annulée par chauffeur</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CLIENTS VIP -->
-      <div class="section-card" id="vipSection">
-        <div class="card-header">
-          <div>
-            <div class="card-title">👑 Clients VIP (Cercle DNA)</div>
-            <div class="card-sub">Clients ayant effectué 30+ courses</div>
-          </div>
-        </div>
-        <div class="vip-item">
-          <div class="vip-avatar">👑</div>
-          <div>
-            <div class="vip-nom">Merveille K.</div>
-            <div class="vip-courses">45 courses • Membre depuis 3 mois</div>
-          </div>
-          <span class="vip-badge">🏆 Gold</span>
-        </div>
-        <div class="vip-item">
-          <div class="vip-avatar">👑</div>
-          <div>
-            <div class="vip-nom">Patrick L.</div>
-            <div class="vip-courses">32 courses • Membre depuis 2 mois</div>
-          </div>
-          <span class="vip-badge">🥈 Silver</span>
-        </div>
-        <div class="vip-item">
-          <div class="vip-avatar">👑</div>
-          <div>
-            <div class="vip-nom">Sandra M.</div>
-            <div class="vip-courses">30 courses • Nouveau membre</div>
-          </div>
-          <span class="vip-badge">🥉 Bronze</span>
-        </div>
-      </div>
-
-      <!-- ENTREPRISES B2B -->
-      <div class="section-card" id="b2bSection">
-        <div class="card-header">
-          <div>
-            <div class="card-title">🏢 Entreprises B2B</div>
-            <div class="card-sub">Contrats et prospection commerciale</div>
-          </div>
-        </div>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Entreprise</th>
-                <th>Contact</th>
-                <th>Forfait</th>
-                <th>Statut</th>
-                <th>Potentiel</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="font-weight:600">🛢️ TotalEnergies</td>
-                <td>En attente</td>
-                <td>Premium</td>
-                <td><span class="td-statut-badge statut-prospection">📞 Prospection</span></td>
-                <td>⭐⭐⭐⭐⭐</td>
-              </tr>
-              <tr>
-                <td style="font-weight:600">🏦 BGFI Bank</td>
-                <td>En attente</td>
-                <td>Business</td>
-                <td><span class="td-statut-badge statut-prospection">📞 Prospection</span></td>
-                <td>⭐⭐⭐⭐</td>
-              </tr>
-              <tr>
-                <td style="font-weight:600">🏨 Hôtel Pefaco</td>
-                <td>En attente</td>
-                <td>Essentiel</td>
-                <td><span class="td-statut-badge statut-interesse">✅ Intéressé</span></td>
-                <td>⭐⭐⭐</td>
-              </tr>
-              <tr>
-                <td style="font-weight:600">🚢 Bolloré</td>
-                <td>En attente</td>
-                <td>Premium</td>
-                <td><span class="td-statut-badge statut-prospection">📞 Prospection</span></td>
-                <td>⭐⭐⭐⭐⭐</td>
-              </tr>
-              <tr>
-                <td style="font-weight:600">✈️ Air France</td>
-                <td>En attente</td>
-                <td>Business</td>
-                <td><span class="td-statut-badge statut-prospection">📞 Prospection</span></td>
-                <td>⭐⭐⭐⭐</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- RAPPORTS -->
-      <div class="section-card" id="reportsSection">
-        <div class="card-header">
-          <div>
-            <div class="card-title">📋 Rapports</div>
-            <div class="card-sub">Exports et synthèses</div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="rent-grid">
-            <div class="rent-card" style="cursor:pointer">
-              <div class="rent-avatar" style="background:#D1FAE5">📊</div>
-              <div>
-                <div class="rent-nom">Rapport journalier</div>
-                <div class="rent-courses">Généré automatiquement à 21h</div>
-              </div>
-            </div>
-            <div class="rent-card" style="cursor:pointer">
-              <div class="rent-avatar" style="background:#DBEAFE">📈</div>
-              <div>
-                <div class="rent-nom">Rapport hebdomadaire</div>
-                <div class="rent-courses">Chaque dimanche soir</div>
-              </div>
-            </div>
-            <div class="rent-card" style="cursor:pointer">
-              <div class="rent-avatar" style="background:#FEF3C7">📑</div>
-              <div>
-                <div class="rent-nom">Rapport mensuel</div>
-                <div class="rent-courses">Le dernier jour du mois</div>
-              </div>
-            </div>
-            <div class="rent-card" style="cursor:pointer">
-              <div class="rent-avatar" style="background:var(--violet-pale)">💰</div>
-              <div>
-                <div class="rent-nom">Export financier</div>
-                <div class="rent-courses">Télécharger en Excel</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- PARAMÈTRES -->
-      <div class="section-card" id="settingsSection">
-        <div class="card-header">
-          <div>
-            <div class="card-title">⚙️ Paramètres DNA</div>
-            <div class="card-sub">Configuration du système</div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="param-grid">
-            <div class="param-item">
-              <div class="param-label">Commission DNA Move</div>
-              <div class="param-value">16%</div>
-            </div>
-            <div class="param-item">
-              <div class="param-label">Commission DNA Black</div>
-              <div class="param-value">22%</div>
-            </div>
-            <div class="param-item">
-              <div class="param-label">Abonnement Move</div>
-              <div class="param-value">25 000 FCFA</div>
-            </div>
-            <div class="param-item">
-              <div class="param-label">Abonnement Black</div>
-              <div class="param-value">45 000 FCFA</div>
-            </div>
-            <div class="param-item">
-              <div class="param-label">Prix WiFi</div>
-              <div class="param-value">200 FCFA / 30 min</div>
-            </div>
-            <div class="param-item">
-              <div class="param-label">Caution Move</div>
-              <div class="param-value">50 000 FCFA</div>
-            </div>
-            <div class="param-item">
-              <div class="param-label">Tarif de base</div>
-              <div class="param-value">300 FCFA + 200/km</div>
-            </div>
-            <div class="param-item">
-              <div class="param-label">Cercle DNA</div>
-              <div class="param-value">30 courses minimum</div>
-            </div>
-            <div class="param-item">
-              <div class="param-label">Annulation avant envoi</div>
-              <div class="param-value">Remboursement 80%</div>
-            </div>
-            <div class="param-item">
-              <div class="param-label">Annulation après envoi</div>
-              <div class="param-value">Remboursement 50%</div>
-            </div>
-          </div>
-        </div>
+        <div class="act-item"><div class="act-icon">🚕</div><div class="act-text"><strong>Jean Mbemba</strong> a démarré une course Tié-Tié → Centre-ville</div><div class="act-time">14:32</div></div>
+        <div class="act-item"><div class="act-icon">📶</div><div class="act-text">Nouvelle connexion WiFi dans le taxi <strong>DNA-002</strong></div><div class="act-time">14:28</div></div>
+        <div class="act-item"><div class="act-icon">✅</div><div class="act-text"><strong>Marie Nkouka</strong> a terminé une course OCH → Loandjili</div><div class="act-time">14:15</div></div>
+        <div class="act-item"><div class="act-icon">⭐</div><div class="act-text"><strong>Pierre Lounda</strong> a reçu une note 5/5</div><div class="act-time">14:10</div></div>
+        <div class="act-item"><div class="act-icon">💰</div><div class="act-text">Paiement reçu : <strong>2 500 FCFA</strong> via MTN MOMO</div><div class="act-time">13:58</div></div>
+        <div class="act-item"><div class="act-icon">👤</div><div class="act-text">Nouveau chauffeur inscrit : <strong>Alain Samba</strong></div><div class="act-time">13:45</div></div>
+        <div class="act-item"><div class="act-icon">🔔</div><div class="act-text">Alerte : Jean Mbemba en attente depuis 8 minutes</div><div class="act-time">13:30</div></div>
       </div>
 
     </div>
   </div>
 
-  <!-- LEAFLET -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // DATE
-    document.getElementById('topbarDate').textContent =
-      new Date().toLocaleDateString('fr-FR', {
-        weekday: 'long', day: 'numeric',
-        month: 'long', year: 'numeric'
-      });
-
-    // CARTE
-    const mapDash = L.map('mapDashboard', {
-      zoomControl: true, attributionControl: false
-    }).setView([-4.7692, 11.8635], 13);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapDash);
-
-    const iconeDispo = L.divIcon({
-      html: '<div style="background:linear-gradient(135deg,#10B981,#059669);width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 4px 12px rgba(16,185,129,0.4);border:2px solid white;">🚕</div>',
-      className: '', iconSize: [36, 36], iconAnchor: [18, 18]
-    });
-    const iconeCourse = L.divIcon({
-      html: '<div style="background:linear-gradient(135deg,#3B82F6,#2563EB);width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 4px 12px rgba(59,130,246,0.4);border:2px solid white;">🚕</div>',
-      className: '', iconSize: [36, 36], iconAnchor: [18, 18]
-    });
-
-    // CHAUFFEURS SUR LA CARTE
-    const chauffeurs = [
-      { nom: 'Jean', lat: -4.7850, lng: 11.8450, statut: 'DISPO', zone: 'Tié-Tié' },
-      { nom: 'Pierre', lat: -4.7692, lng: 11.8635, statut: 'COURSE', zone: 'Centre' },
-      { nom: 'Marie', lat: -4.7600, lng: 11.9100, statut: 'DISPO', zone: 'Ngoyo' },
-      { nom: 'François', lat: -4.7700, lng: 11.8800, statut: 'COURSE', zone: 'OCH' }
-    ];
-
-    chauffeurs.forEach(ch => {
-      L.marker([ch.lat, ch.lng], {
-        icon: ch.statut === 'DISPO' ? iconeDispo : iconeCourse
-      }).addTo(mapDash).bindPopup(
-        '<b>' + ch.nom + '</b><br>Zone : ' + ch.zone + '<br>' +
-        (ch.statut === 'DISPO' ? '🟢 Disponible' : '🔵 En course')
-      );
-    });
-
-    // MENU ACTIF
-    document.querySelectorAll('.menu-item').forEach(item => {
-      item.addEventListener('click', function() {
-        document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-        this.classList.add('active');
-      });
-    });
+    document.getElementById('dateJour').textContent = new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   </script>
 </body>
 </html>
