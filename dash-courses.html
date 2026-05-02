@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNA — Courses</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--violet:#6B21A8;--violet-light:#9333EA;--violet-pale:#F3E8FF;--bg:#F8F9FC;--card:#FFFFFF;--text:#1E1B4B;--text-light:#6B7280;--green:#10B981;--red:#EF4444;--shadow:0 2px 12px rgba(0,0,0,0.06)}
+    body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text)}
+    .sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:linear-gradient(180deg,var(--violet) 0%,#4A0080 100%);padding:20px;z-index:100;display:flex;flex-direction:column;overflow-y:auto}
+    .sidebar-logo{display:flex;align-items:center;gap:10px;margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.15)}
+    .sidebar-logo img{width:38px;height:38px;border-radius:10px;object-fit:cover}
+    .sidebar-logo-text{font-size:14px;font-weight:700;color:white}
+    .sidebar-logo-sub{font-size:10px;color:rgba(255,255,255,0.6)}
+    .menu-section{font-size:10px;font-weight:600;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin:18px 0 8px}
+    .menu-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;margin-bottom:3px;transition:all 0.2s}
+    .menu-item:hover{background:rgba(255,255,255,0.1);color:white}
+    .menu-item.active{background:rgba(255,255,255,0.2);color:white;font-weight:600}
+    .menu-icon{font-size:16px;width:22px}
+    .menu-badge{margin-left:auto;background:var(--red);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+    .sidebar-bottom{margin-top:auto;padding-top:20px;border-top:1px solid rgba(255,255,255,0.15)}
+    .sidebar-user{display:flex;align-items:center;gap:10px}
+    .user-avatar{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .user-name{font-size:12px;font-weight:600;color:white}
+    .user-role{font-size:10px;color:rgba(255,255,255,0.5)}
+    .main{margin-left:240px}
+    .topbar{background:white;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #F0F0F0;position:sticky;top:0;z-index:50}
+    .topbar-title{font-size:18px;font-weight:700}
+    .topbar-sub{font-size:12px;color:var(--text-light)}
+    .content{padding:24px}
+    .filters{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+    .filter-btn{padding:8px 18px;border-radius:25px;border:1.5px solid #E5E7EB;background:white;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;color:var(--text-light)}
+    .filter-btn.active{background:var(--violet);color:white;border-color:var(--violet)}
+    .filter-btn:hover{border-color:var(--violet)}
+    .section-card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);border:1px solid #F0F0F0;overflow:hidden}
+    .card-header{padding:16px 20px;border-bottom:1px solid #F8F8F8;display:flex;justify-content:space-between;align-items:center}
+    .card-title{font-size:14px;font-weight:700}
+    table{width:100%;border-collapse:collapse}
+    thead th{padding:12px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;background:#FAFAFA;border-bottom:1px solid #F0F0F0}
+    tbody td{padding:14px 16px;font-size:13px;border-bottom:1px solid #F8F8F8}
+    tbody tr:hover{background:#FAFAFA}
+    .td-id{font-weight:600;color:var(--violet)}
+    .badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;display:inline-block}
+    .b-cours{background:#DBEAFE;color:#1E40AF}
+    .b-term{background:#D1FAE5;color:#065F46}
+    .b-annul{background:#FEE2E2;color:#991B1B}
+    @media(max-width:768px){.sidebar{display:none}.main{margin-left:0}}
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-logo"><img src="https://raw.githubusercontent.com/dinabeni/dna-tracker/ed12391a53eda66f2d33609bbb8fccedf213cf4e/WhatsApp%20Image%202026-04-11%20at%2001.06.45.jpeg" alt="DNA"><div><div class="sidebar-logo-text">DNA Transport</div><div class="sidebar-logo-sub">Dashboard</div></div></div>
+    <div>
+      <div class="menu-section">Principal</div>
+      <a class="menu-item" href="dashboard.html"><span class="menu-icon">📊</span> Vue d'ensemble</a>
+      <a class="menu-item" href="dash-carte.html"><span class="menu-icon">🗺️</span> Carte en direct</a>
+      <a class="menu-item active" href="dash-courses.html"><span class="menu-icon">🚕</span> Courses</a>
+      <div class="menu-section">Gestion</div>
+      <a class="menu-item" href="dash-chauffeurs.html"><span class="menu-icon">👤</span> Chauffeurs</a>
+      <a class="menu-item" href="dash-finances.html"><span class="menu-icon">💰</span> Finances</a>
+      <a class="menu-item" href="dash-wifi.html"><span class="menu-icon">📶</span> WiFi & Revenus</a>
+      <a class="menu-item" href="dash-b2b.html"><span class="menu-icon">🏢</span> Entreprises B2B</a>
+      <a class="menu-item" href="dash-rentabilite.html"><span class="menu-icon">📈</span> Rentabilité</a>
+      <div class="menu-section">Clients</div>
+      <a class="menu-item" href="dash-vip.html"><span class="menu-icon">👑</span> Clients VIP</a>
+      <a class="menu-item" href="dash-annulations.html"><span class="menu-icon">📉</span> Annulations</a>
+      <div class="menu-section">Outils</div>
+      <a class="menu-item" href="dash-alertes.html"><span class="menu-icon">🔔</span> Alertes</a>
+      <a class="menu-item" href="dash-rapports.html"><span class="menu-icon">📋</span> Rapports</a>
+      <a class="menu-item" href="dash-parametres.html"><span class="menu-icon">⚙️</span> Paramètres</a>
+    </div>
+    <div class="sidebar-bottom"><div class="sidebar-user"><div class="user-avatar">👑</div><div><div class="user-name">Direction DNA</div><div class="user-role">Administrateur</div></div></div></div>
+  </div>
+  <div class="main">
+    <div class="topbar"><div><div class="topbar-title">🚕 Gestion des courses</div><div class="topbar-sub">Suivi en temps réel de toutes les courses DNA</div></div></div>
+    <div class="content">
+      <div class="filters">
+        <button class="filter-btn active">Toutes (12)</button>
+        <button class="filter-btn">🔵 En cours (2)</button>
+        <button class="filter-btn">✅ Terminées (9)</button>
+        <button class="filter-btn">❌ Annulées (1)</button>
+      </div>
+      <div class="section-card">
+        <table>
+          <thead><tr><th>N° Course</th><th>Chauffeur</th><th>Départ</th><th>Arrivée</th><th>Distance</th><th>Prix</th><th>Commission</th><th>Statut</th><th>Heure</th></tr></thead>
+          <tbody>
+            <tr><td class="td-id">CR-0001</td><td>Jean Mbemba</td><td>📍 Tié-Tié</td><td>🏁 Centre</td><td>3.5 km</td><td style="font-weight:600">1 000 F</td><td style="color:var(--violet);font-weight:600">160 F</td><td><span class="badge b-cours">🔵 En cours</span></td><td style="color:var(--text-light)">14:32</td></tr>
+            <tr><td class="td-id">CR-0002</td><td>Pierre Lounda</td><td>📍 Ngoyo</td><td>🏁 Centre</td><td>11 km</td><td style="font-weight:600">2 500 F</td><td style="color:var(--violet);font-weight:600">400 F</td><td><span class="badge b-cours">🔵 En cours</span></td><td style="color:var(--text-light)">14:28</td></tr>
+            <tr><td class="td-id">CR-0003</td><td>Marie Nkouka</td><td>📍 OCH</td><td>🏁 Loandjili</td><td>6 km</td><td style="font-weight:600">1 500 F</td><td style="color:var(--violet);font-weight:600">240 F</td><td><span class="badge b-term">✅ Terminée</span></td><td style="color:var(--text-light)">14:15</td></tr>
+            <tr><td class="td-id">CR-0004</td><td>François Okoué</td><td>📍 Centre</td><td>🏁 Aéroport</td><td>12 km</td><td style="font-weight:600">2 500 F</td><td style="color:var(--violet);font-weight:600">400 F</td><td><span class="badge b-term">✅ Terminée</span></td><td style="color:var(--text-light)">13:45</td></tr>
+            <tr><td class="td-id">CR-0005</td><td>Jean Mbemba</td><td>📍 Centre</td><td>🏁 Ngoyo</td><td>11 km</td><td style="font-weight:600">2 500 F</td><td style="color:var(--violet);font-weight:600">400 F</td><td><span class="badge b-term">✅ Terminée</span></td><td style="color:var(--text-light)">12:30</td></tr>
+            <tr><td class="td-id">CR-0006</td><td>Marie Nkouka</td><td>📍 Tié-Tié</td><td>🏁 Ngoyo</td><td>8.5 km</td><td style="font-weight:600">2 000 F</td><td style="color:var(--violet);font-weight:600">320 F</td><td><span class="badge b-annul">❌ Annulée</span></td><td style="color:var(--text-light)">11:15</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
