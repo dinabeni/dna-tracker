@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNA — Rentabilité</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--violet:#6B21A8;--violet-light:#9333EA;--violet-pale:#F3E8FF;--bg:#F8F9FC;--card:#FFFFFF;--text:#1E1B4B;--text-light:#6B7280;--green:#10B981;--red:#EF4444;--gold:#F59E0B;--shadow:0 2px 12px rgba(0,0,0,0.06)}
+    body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text)}
+    .sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:linear-gradient(180deg,var(--violet) 0%,#4A0080 100%);padding:20px;z-index:100;display:flex;flex-direction:column;overflow-y:auto}
+    .sidebar-logo{display:flex;align-items:center;gap:10px;margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.15)}
+    .sidebar-logo img{width:38px;height:38px;border-radius:10px;object-fit:cover}
+    .sidebar-logo-text{font-size:14px;font-weight:700;color:white}
+    .sidebar-logo-sub{font-size:10px;color:rgba(255,255,255,0.6)}
+    .menu-section{font-size:10px;font-weight:600;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin:18px 0 8px}
+    .menu-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;margin-bottom:3px;transition:all 0.2s}
+    .menu-item:hover{background:rgba(255,255,255,0.1);color:white}
+    .menu-item.active{background:rgba(255,255,255,0.2);color:white;font-weight:600}
+    .menu-icon{font-size:16px;width:22px}
+    .menu-badge{margin-left:auto;background:var(--red);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+    .sidebar-bottom{margin-top:auto;padding-top:20px;border-top:1px solid rgba(255,255,255,0.15)}
+    .sidebar-user{display:flex;align-items:center;gap:10px}
+    .user-avatar{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .user-name{font-size:12px;font-weight:600;color:white}
+    .user-role{font-size:10px;color:rgba(255,255,255,0.5)}
+    .main{margin-left:240px}
+    .topbar{background:white;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #F0F0F0;position:sticky;top:0;z-index:50}
+    .topbar-title{font-size:18px;font-weight:700}
+    .topbar-sub{font-size:12px;color:var(--text-light)}
+    .content{padding:24px}
+    .section-card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);border:1px solid #F0F0F0;overflow:hidden;margin-bottom:20px}
+    .card-header{padding:16px 20px;border-bottom:1px solid #F8F8F8}
+    .card-title{font-size:14px;font-weight:700}
+    .card-sub{font-size:11px;color:var(--text-light)}
+    table{width:100%;border-collapse:collapse}
+    thead th{padding:12px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--text-light);text-transform:uppercase;background:#FAFAFA;border-bottom:1px solid #F0F0F0}
+    tbody td{padding:14px 16px;font-size:13px;border-bottom:1px solid #F8F8F8}
+    tbody tr:hover{background:#FAFAFA}
+    .rank-badge{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+    .rank-1{background:#FEF3C7;color:#92400E}
+    .rank-2{background:#F3F4F6;color:#374151}
+    .rank-3{background:#FEE2E2;color:#991B1B}
+    .rank-other{background:var(--violet-pale);color:var(--violet)}
+    .perf-bar{height:8px;border-radius:10px;background:#F0F0F0;overflow:hidden;width:120px}
+    .perf-fill{height:100%;border-radius:10px;background:linear-gradient(135deg,var(--violet),var(--violet-light))}
+    @media(max-width:768px){.sidebar{display:none}.main{margin-left:0}}
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-logo"><img src="https://raw.githubusercontent.com/dinabeni/dna-tracker/ed12391a53eda66f2d33609bbb8fccedf213cf4e/WhatsApp%20Image%202026-04-11%20at%2001.06.45.jpeg" alt="DNA"><div><div class="sidebar-logo-text">DNA Transport</div><div class="sidebar-logo-sub">Dashboard</div></div></div>
+    <div>
+      <div class="menu-section">Principal</div>
+      <a class="menu-item" href="dashboard.html"><span class="menu-icon">📊</span> Vue d'ensemble</a>
+      <a class="menu-item" href="dash-carte.html"><span class="menu-icon">🗺️</span> Carte en direct</a>
+      <a class="menu-item" href="dash-courses.html"><span class="menu-icon">🚕</span> Courses</a>
+      <div class="menu-section">Gestion</div>
+      <a class="menu-item" href="dash-chauffeurs.html"><span class="menu-icon">👤</span> Chauffeurs</a>
+      <a class="menu-item" href="dash-finances.html"><span class="menu-icon">💰</span> Finances</a>
+      <a class="menu-item" href="dash-wifi.html"><span class="menu-icon">📶</span> WiFi & Revenus</a>
+      <a class="menu-item" href="dash-b2b.html"><span class="menu-icon">🏢</span> Entreprises B2B</a>
+      <a class="menu-item active" href="dash-rentabilite.html"><span class="menu-icon">📈</span> Rentabilité</a>
+      <div class="menu-section">Clients</div>
+      <a class="menu-item" href="dash-vip.html"><span class="menu-icon">👑</span> Clients VIP</a>
+      <a class="menu-item" href="dash-annulations.html"><span class="menu-icon">📉</span> Annulations</a>
+      <div class="menu-section">Outils</div>
+      <a class="menu-item" href="dash-alertes.html"><span class="menu-icon">🔔</span> Alertes</a>
+      <a class="menu-item" href="dash-rapports.html"><span class="menu-icon">📋</span> Rapports</a>
+      <a class="menu-item" href="dash-parametres.html"><span class="menu-icon">⚙️</span> Paramètres</a>
+    </div>
+    <div class="sidebar-bottom"><div class="sidebar-user"><div class="user-avatar">👑</div><div><div class="user-name">Direction DNA</div><div class="user-role">Administrateur</div></div></div></div>
+  </div>
+  <div class="main">
+    <div class="topbar"><div><div class="topbar-title">📈 Rentabilité par chauffeur</div><div class="topbar-sub">Classement et performance de chaque partenaire</div></div></div>
+    <div class="content">
+      <div class="section-card">
+        <div class="card-header"><div class="card-title">🏆 Classement des chauffeurs</div><div class="card-sub">Performance du mois en cours</div></div>
+        <table>
+          <thead><tr><th>#</th><th>Chauffeur</th><th>Courses</th><th>Note</th><th>Gains nets</th><th>Commission DNA</th><th>Performance</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="rank-badge rank-1">🥇</div></td>
+              <td style="font-weight:600">Pierre Lounda</td>
+              <td>63</td>
+              <td>⭐ 5.0</td>
+              <td style="color:var(--green);font-weight:700">52 920 F</td>
+              <td style="color:var(--violet);font-weight:600">10 080 F</td>
+              <td><div class="perf-bar"><div class="perf-fill" style="width:100%"></div></div></td>
+            </tr>
+            <tr>
+              <td><div class="rank-badge rank-2">🥈</div></td>
+              <td style="font-weight:600">François Okoué</td>
+              <td>51</td>
+              <td>⭐ 4.7</td>
+              <td style="color:var(--green);font-weight:700">42 840 F</td>
+              <td style="color:var(--violet);font-weight:600">8 160 F</td>
+              <td><div class="perf-bar"><div class="perf-fill" style="width:81%"></div></div></td>
+            </tr>
+            <tr>
+              <td><div class="rank-badge rank-3">🥉</div></td>
+              <td style="font-weight:600">Jean Mbemba</td>
+              <td>47</td>
+              <td>⭐ 4.8</td>
+              <td style="color:var(--green);font-weight:700">39 480 F</td>
+              <td style="color:var(--violet);font-weight:600">7 520 F</td>
+              <td><div class="perf-bar"><div class="perf-fill" style="width:75%"></div></div></td>
+            </tr>
+            <tr>
+              <td><div class="rank-badge rank-other">4</div></td>
+              <td style="font-weight:600">Marie Nkouka</td>
+              <td>38</td>
+              <td>⭐ 4.5</td>
+              <td style="color:var(--green);font-weight:700">31 920 F</td>
+              <td style="color:var(--violet);font-weight:600">6 080 F</td>
+              <td><div class="perf-bar"><div class="perf-fill" style="width:60%"></div></div></td>
+            </tr>
+            <tr>
+              <td><div class="rank-badge rank-other">5</div></td>
+              <td style="font-weight:600">Alain Samba</td>
+              <td>25</td>
+              <td>⭐ 4.2</td>
+              <td style="color:var(--green);font-weight:700">21 000 F</td>
+              <td style="color:var(--violet);font-weight:600">4 000 F</td>
+              <td><div class="perf-bar"><div class="perf-fill" style="width:40%"></div></div></td>
+            </tr>
+            <tr>
+              <td><div class="rank-badge rank-other">6</div></td>
+              <td style="font-weight:600">Robert Massamba</td>
+              <td>19</td>
+              <td>⭐ 4.0</td>
+              <td style="color:var(--green);font-weight:700">15 960 F</td>
+              <td style="color:var(--violet);font-weight:600">3 040 F</td>
+              <td><div class="perf-bar"><div class="perf-fill" style="width:30%"></div></div></td>
+            </tr>
+            <tr>
+              <td><div class="rank-badge rank-other">7</div></td>
+              <td style="font-weight:600">Christine Bouanga</td>
+              <td>8</td>
+              <td>⭐ 4.9</td>
+              <td style="color:var(--green);font-weight:700">6 720 F</td>
+              <td style="color:var(--violet);font-weight:600">1 280 F</td>
+              <td><div class="perf-bar"><div class="perf-fill" style="width:13%"></div></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
